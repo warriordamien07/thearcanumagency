@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
+import { DragCursor } from "../components/ui/DragCursor";
 
 export const metadata: Metadata = {
   title: "The Arcanum Agency, Private practice building digital products that matter",
@@ -26,9 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="wrap">
           <main id="main">{children}</main>
           <Footer />
-          <div id="dragCursor" className="drag-cursor" aria-hidden="true">
-            <span>DRAG</span>
-          </div>
+          <DragCursor />
           <div className="grain" aria-hidden="true" />
         </div>
         <Script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js" strategy="afterInteractive" />

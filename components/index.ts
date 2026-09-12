@@ -2,6 +2,7 @@ export * from "./Header";
 export * from "./Footer";
 export * from "./ui/Button";
 export * from "./ui/Card";
+export * from "./ui/DragCursor";
 export * from "./ui/Section";
 export * from "./sections/Hero";
 export * from "./sections/Intro";

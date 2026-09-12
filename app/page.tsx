@@ -36,48 +36,7 @@ export default function Page() {
     const hero = document.querySelector(".hero");
     if (hero) hero.classList.add("is-visible");
 
-    // Drag cursor — single delegated controller (window-level so the bubble
-    // never freezes mid-screen on scroll, sticks after mouseup, or leaks
-    // listeners on remount)
-    const dragCursor = document.getElementById("dragCursor");
-    const cleanups: Array<() => void> = [];
-    const on = <K extends keyof WindowEventMap>(
-      target: Window | Document | HTMLElement,
-      type: string,
-      fn: (e: any) => void,
-      opts?: AddEventListenerOptions
-    ) => {
-      target.addEventListener(type, fn as EventListener, opts);
-      cleanups.push(() => target.removeEventListener(type, fn as EventListener, opts));
-    };
-    if (dragCursor) {
-      let raf: number | null = null;
-      let mx = 0,
-        my = 0;
-      const place = () => {
-        raf = null;
-        dragCursor.style.left = mx + "px";
-        dragCursor.style.top = my + "px";
-      };
-      const overCard = (e: MouseEvent) =>
-        e.target instanceof Element && !!e.target.closest(".carousel .card");
-      on(window, "mousemove", (e: MouseEvent) => {
-        mx = e.clientX;
-        my = e.clientY;
-        if (!raf) raf = requestAnimationFrame(place) as unknown as number;
-        const onCard = overCard(e);
-        dragCursor.classList.toggle("is-visible", onCard);
-        if (!onCard) dragCursor.classList.remove("is-dragging");
-      }, { passive: true });
-      on(window, "mousedown", (e: MouseEvent) => {
-        if (overCard(e)) dragCursor.classList.add("is-dragging");
-      });
-      on(window, "mouseup", () => dragCursor.classList.remove("is-dragging"));
-      // scrolling (wheel, Lenis, touch) moves cards under a resting pointer
-      const hide = () => dragCursor.classList.remove("is-visible", "is-dragging");
-      on(window, "scroll", hide, { passive: true, capture: true });
-      on(document, "mouseleave", hide);
-    }
+    // Drag tooltip is owned by <DragCursor/> in the root layout.
 
     // Lenis init (same config as HTML) — guarded against double-init
     // (load listener + timeout can both fire, plus StrictMode remount)
@@ -160,7 +119,6 @@ export default function Page() {
     });
 
     return () => {
-      cleanups.forEach((fn) => fn());
       ro.disconnect();
     };
   }, []);
