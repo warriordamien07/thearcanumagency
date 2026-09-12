@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { Ph } from "../ui/Ph";
 
 export function Spotlight() {
   const ref = useRef<HTMLElement>(null);
@@ -39,7 +40,7 @@ export function Spotlight() {
         </div>
       </div>
       <div className="spotlight-media" aria-label="Studio work">
-        <img className="ph" src="/assets/img/spotlight.jpg" alt="Minimal white architecture viewed from below" loading="lazy" decoding="async" style={{ aspectRatio: "4/5" }} />
+        <Ph src="/assets/img/spotlight.jpg" alt="Minimal white architecture viewed from below" sizes="(max-width: 900px) 100vw, 480px" style={{ aspectRatio: "4/5" }} />
       </div>
     </section>
   );

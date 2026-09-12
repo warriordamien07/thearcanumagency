@@ -1,5 +1,6 @@
 "use client";
 import { useEffect } from "react";
+import { Ph } from "../ui/Ph";
 
 export function Services() {
   useEffect(() => {
@@ -66,7 +67,7 @@ export function Services() {
               </div>
               <div className="service-sticky-visual">
                 <div className="img">
-                  <img className="ph" src={s.img} alt={s.alt} loading="lazy" decoding="async" />
+                  <Ph src={s.img} alt={s.alt} sizes="(max-width: 900px) 100vw, 480px" />
                 </div>
                 <p>{s.desc}</p>
                 <ul>

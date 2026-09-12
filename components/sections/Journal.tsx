@@ -1,4 +1,5 @@
 import { SectionHead } from "../ui/Section";
+import { Ph } from "../ui/Ph";
 
 export function Journal() {
   return (
@@ -11,7 +12,7 @@ export function Journal() {
         ].map((j) => (
           <a key={j.title} href="#" className="card">
             <div style={{ aspectRatio: 1.36 as any, background: "var(--arc-mist)", border: "1px solid var(--arc-mist)", overflow: "hidden" }}>
-              <img className="ph" src={j.img} alt={j.alt} loading="lazy" decoding="async" />
+              <Ph src={j.img} alt={j.alt} sizes="(max-width: 800px) 100vw, 340px" />
             </div>
             <div className="card-body">
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16 }}>

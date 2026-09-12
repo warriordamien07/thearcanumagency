@@ -1,9 +1,15 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import Script from "next/script";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { DragCursor } from "../components/ui/DragCursor";
+
+// Self-hosted (preloaded, no render-blocking Google Fonts chain).
+// Variable names match --arc-body / --arc-mono in globals.css.
+const geistSans = GeistSans;
+const geistMono = GeistMono;
 
 export const metadata: Metadata = {
   title: "The Arcanum Agency, Private practice building digital products that matter",
@@ -16,10 +22,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         <link rel="icon" href="/assets/arcanum-mark.svg" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..600&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet" />
       </head>
-      <body>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <a className="skip" href="#main">
           Skip to content
         </a>
@@ -30,7 +34,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <DragCursor />
           <div className="grain" aria-hidden="true" />
         </div>
-        <Script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js" strategy="afterInteractive" />
       </body>
     </html>
   );

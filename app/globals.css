@@ -1,7 +1,7 @@
 @font-face{font-family:"Arcanum Sans";src:local("Arcanum Sans");font-weight:300 700;font-display:swap}
   :root{
     --arc-ink:#222026; --arc-paper:#F9F9FA; --arc-plum:#403C59; --arc-mist:#E5E5EA; --arc-white:#fff;
-    --arc-display:"Arcanum Sans","Geist",sans-serif; --arc-body:"Geist",system-ui,sans-serif; --arc-mono:"Geist Mono",monospace;
+    --arc-display:"Arcanum Sans",var(--font-geist-sans),sans-serif; --arc-body:var(--font-geist-sans),system-ui,sans-serif; --arc-mono:var(--font-geist-mono),monospace;
     --arc-max:1280px; --arc-pad:clamp(24px,6vw,80px); --arc-section:clamp(56px,7vw,112px);
     --arc-ease:cubic-bezier(0.25,0.46,0.45,0.94);
     --arc-ease-smooth:cubic-bezier(0.16,1,0.3,1);
@@ -119,8 +119,8 @@
   body.spotlight-active .drag-cursor.is-dragging,body.service-active .drag-cursor.is-dragging,body.nav-overlay-open .drag-cursor.is-dragging{background:var(--arc-paper)}
   @media(prefers-reduced-motion:reduce){.drag-cursor{transition:opacity .15s linear}}
   @media(hover:none){.drag-cursor{display:none !important} .carousel .card,.overlay-carousel .card,body.has-drag-cursor .carousel .card,body.has-drag-cursor .overlay-carousel .card{cursor:grab}}
-  /* Film grain — static noise-tile overlay, subtle on both themes */
-  .grain{position:fixed;inset:0;z-index:2000;pointer-events:none;background-image:url("/assets/noise_10_percecnt.png");background-size:300px 300px;background-repeat:repeat;opacity:.5}
+  /* Film grain — inline SVG turbulence tile (~1KB) instead of a 137KB PNG */
+  .grain{position:fixed;inset:0;z-index:2000;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");background-size:300px 300px;background-repeat:repeat;opacity:.5}
   .card{border:none;border-radius:0;overflow:hidden;background:transparent;display:flex;flex-direction:column}
   .card img{width:100%;aspect-ratio:1.36;object-fit:cover;background:var(--arc-mist)}
   /* Photography — grayscale system, color on linked hover */
@@ -274,7 +274,7 @@
   .overlay-carousel::-webkit-scrollbar{display:none}
   .overlay-carousel.dragging{cursor:grabbing;user-select:none;scroll-behavior:auto;scroll-snap-type:none}
   .overlay-carousel .card{flex:0 0 360px;scroll-snap-align:start;cursor:grab;border:none;background:transparent}
-  .overlay-carousel .card > div:first-child{aspect-ratio:1.36;background:rgba(255,255,255,0.04);border:1px solid rgba(229,229,234,0.14);display:flex;align-items:center;justify-content:center;color:rgba(249,249,250,0.5);font-size:11px;letter-spacing:0.08em;text-transform:uppercase}
+  .overlay-carousel .card > div:first-child{aspect-ratio:1.36;background:rgba(255,255,255,0.04);border:1px solid rgba(229,229,234,0.14);overflow:hidden}
   .overlay-carousel .card .card-body{padding:14px;display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:12px}
   .overlay-carousel .card .eyebrow{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(249,249,250,0.5)}
   .overlay-carousel .card h3{font-family:var(--arc-display);font-size:clamp(20px,2.6vw,28px);line-height:1.05;font-weight:500;margin:0;text-transform:uppercase;color:var(--arc-paper);flex:1;min-width:0}

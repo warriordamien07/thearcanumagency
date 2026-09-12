@@ -1,4 +1,5 @@
 import { SectionHead } from "../ui/Section";
+import { Ph } from "../ui/Ph";
 
 export function Work() {
   return (
@@ -13,7 +14,7 @@ export function Work() {
         ].map((w) => (
           <a key={w.p} href="mailto:hello@thearcanum.agency?subject=Work%20enquiry" className="card">
             <div style={{ aspectRatio: 1.36 as any, background: "var(--arc-mist)", border: "1px solid var(--arc-mist)", overflow: "hidden" }}>
-              <img className="ph" src={w.img} alt={w.alt} loading="lazy" decoding="async" />
+              <Ph src={w.img} alt={w.alt} sizes="(max-width: 1280px) 100vw, 1280px" />
             </div>
             <div className="card-body">
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16 }}>

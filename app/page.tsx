@@ -39,21 +39,23 @@ export default function Page() {
     // Drag tooltip is owned by <DragCursor/> in the root layout.
 
     // Lenis init (same config as HTML) — guarded against double-init
-    // (load listener + timeout can both fire, plus StrictMode remount)
-    function initLenis() {
+    // (load listener + timeout can both fire, plus StrictMode remount).
+    // Bundled via npm + dynamically imported so it stays out of the
+    // critical bundle and off any third-party origin.
+    async function initLenis() {
       // @ts-ignore
       if ((window as any).__lenis || (initLenis as any)._done) return;
       (initLenis as any)._done = true;
-      // @ts-ignore
-      if ((window as any).Lenis) {
+      try {
+        const { default: Lenis } = await import("lenis");
         // @ts-ignore
-        const lenis = new (window as any).Lenis({
+        if ((window as any).__lenis) return;
+        const lenis = new Lenis({
           duration: 1.75,
           easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
           wheelMultiplier: 1.0,
           touchMultiplier: 1.35,
           smoothWheel: true,
-          smoothTouch: false,
           gestureOrientation: "vertical",
         });
         // @ts-ignore
@@ -82,7 +84,7 @@ export default function Page() {
                 if (t) {
                   e.preventDefault();
                   e.stopImmediatePropagation();
-                  lenis.scrollTo(t, {
+                  lenis.scrollTo(t as HTMLElement, {
                     offset: -80,
                     duration: 1.5,
                     easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -94,6 +96,9 @@ export default function Page() {
             { capture: true }
           );
         });
+      } catch {
+        // Chunk failed (e.g. offline): let a later trigger retry.
+        (initLenis as any)._done = false;
       }
     }
     if (document.readyState === "complete") initLenis();
