@@ -62,7 +62,7 @@ export function Featured() {
           ["Senior attention", "Direct access to principals from inquiry to delivery, with clear scope and deliberate pace from start to finish."],
           ["Continuity", "Relationships over transactions. We stay close beyond launch to refine, compound value, and keep the brand unmistakable."],
         ].map(([t, d]) => (
-          <div key={t} className="card">
+          <div key={t} className="card" tabIndex={0} role="button" aria-label={`${t} — Read more`}>
             <div
               style={{
                 aspectRatio: 1.36 as any,

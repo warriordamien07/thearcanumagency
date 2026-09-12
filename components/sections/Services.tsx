@@ -23,6 +23,20 @@ const DEFINITIONS: Record<string, string> = {
 
 function ServiceBullet({ label, id }: { label: string; id: string }) {
   const [open, setOpen] = useState(false);
+  const isTouch = typeof window !== "undefined" && window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+
+  const handleClick = () => setOpen((v) => !v);
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      setOpen((v) => !v);
+    }
+  };
+  const handleMouseEnter = () => { if (!isTouch) setOpen(true); };
+  const handleMouseLeave = () => { if (!isTouch) setOpen(false); };
+  const handleFocus = () => { if (!isTouch) setOpen(true); };
+  const handleBlur = () => { if (!isTouch) setOpen(false); };
+
   return (
     <>
       <li
@@ -31,17 +45,12 @@ function ServiceBullet({ label, id }: { label: string; id: string }) {
         tabIndex={0}
         aria-expanded={open}
         aria-controls={`${id}-def`}
-        onClick={() => setOpen((v) => !v)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            setOpen((v) => !v);
-          }
-        }}
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
-        onFocus={() => setOpen(true)}
-        onBlur={() => setOpen(false)}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
       >
         <span className="svc-icon" aria-hidden="true">
           <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

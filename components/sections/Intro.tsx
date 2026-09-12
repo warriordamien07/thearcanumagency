@@ -19,7 +19,7 @@ export function Intro() {
       <style>{`
       .intro-grid{display:grid;gap:clamp(24px,4vw,48px);align-items:stretch}
       @media(min-width:900px){.intro-grid{grid-template-columns:minmax(0,2fr) minmax(0,1fr);align-items:start}}
-      @media(max-width:899px){.intro-grid{grid-template-columns:1fr 86px;gap:16px;align-items:end}}
+      @media(max-width:899px){.intro-grid{grid-template-columns:1fr auto;gap:16px;align-items:end}}
       .intro-copy{align-self:center;padding-block:8px;min-width:0}
       .intro-copy h2{font-family:var(--arc-display);font-size:clamp(24px,3.2vw,38px);line-height:1.05;letter-spacing:-0.03em;margin:0;text-transform:uppercase;max-width:none;word-wrap:break-word}
       .intro-copy p{color:var(--color-text-muted);font-size:clamp(16px,1.4vw,18px);line-height:26px;max-width:65ch;margin:14px 0 0}

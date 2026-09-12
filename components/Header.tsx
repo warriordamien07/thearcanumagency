@@ -189,7 +189,7 @@ export function Header() {
                 { t: "SEO & AI Optimization", d: "Search-ready foundations tuned for traditional and generative engines.", img: "/assets/img/seo.jpg", alt: "Search analytics" },
                 { t: "Ecommerce & Website Care", d: "Storefronts built to convert, plus hosting and care after launch.", img: "/assets/img/ecommerce.jpg", alt: "Checkout and payment" },
               ].map((s) => (
-                <div key={s.t} className="card">
+                <div key={s.t} className="card" tabIndex={0} role="button" aria-label={`Explore ${s.t}`}>
                   <div style={{ aspectRatio: 1.36 as any, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(229,229,234,0.14)", overflow: "hidden" }}>
                     <Ph src={s.img} alt={s.alt} sizes="(max-width: 860px) 82vw, 360px" />
                   </div>
