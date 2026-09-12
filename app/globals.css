@@ -6,8 +6,10 @@
     --arc-ease:cubic-bezier(0.25,0.46,0.45,0.94);
     --arc-ease-smooth:cubic-bezier(0.16,1,0.3,1);
     --arc-ease-dark:cubic-bezier(0.76,0,0.24,1);
-    /* FIX #5/#9: single source of truth for the sticky header height */
+    /* single source of truth for the sticky header height (desktop) */
     --header-h:106px;
+    /* BUG-11: header is 82px tall on mobile; used by scroll-padding + sticky title */
+    --header-h-mobile:82px;
     /* === Design Tokens: Spacing (8px base, 4px half-step) === */
     --space-1:4px; --space-2:8px; --space-3:16px; --space-4:24px; --space-5:32px; --space-6:48px; --space-7:64px; --space-8:80px; --space-9:96px; --space-10:112px; --space-11:128px; --space-12:160px;
     /* === Typography: modular 1.25 === */
@@ -21,18 +23,17 @@
     --color-bg:var(--arc-paper); --color-surface:var(--arc-white); --color-text:var(--arc-ink); --color-text-muted:#3f3c59; --color-border:var(--arc-mist); --color-action:var(--arc-plum); --color-danger:#9e2b25; --color-success:#1a7a4a; --color-focus:#403C59;
     --color-text-muted-on-dark:rgba(249,249,250,0.75);
   }
-  @media(prefers-color-scheme:dark uses){
+  /* BUG-01 FIX: was `@media(prefers-color-scheme:dark uses){` — invalid media feature broke the whole block */
+  @media(prefers-color-scheme:dark){
     :root{
-      /* FIX #2/# --10: dark theme tokens now actually get consumed by html/body */
       --color-bg:#111014; --color-surface:#1a1820; --color-text:#F9F9FA; --color-text-muted:rgba(249,249,250,0.72); --color-border:rgba(229,229,234,0.14); --color-focus:#F9F9FA;
     }
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth;scroll-padding-top:calc(var(--header-h) + 8px);overflow-x:hidden}
-  /* FIX #2/#3/#10: htmlcolor-bg, and can invert alongside body */
+  /* html uses the semantic token so prefers-color-scheme:dark actually applies */
   html{background:var(--color-bg);transition:background 1.1s var(--arc-ease-dark)}
-  html:has(body.spotlight-active),
-  html:has(body.service-active),
+  /* the modal overlay is genuinely dark — keep the html surface in sync to avoid an overscroll flash */
   html:has(body.nav-overlay-open){background:var(--arc-ink)}
   html,body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--arc-body);-webkit-font-smoothing:antialiased}
   html.lenis,html.lenis body{height:auto} .lenis.lenis-smooth{scroll-behavior:auto !important} .lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain} .lenis.lenis-stopped{overflow:hidden}
@@ -43,8 +44,6 @@
   .reveal-delay-1{transition-delay:.1s} .reveal-delay-2{transition-delay:.2s} .reveal-delay-3{transition-delay:.3s}
   ::selection{background:var(--arc-ink);color:var(--arc-paper)} ::-moz-selection{background:var(--arc-ink);color:var(--arc-paper)}
   .footer ::selection{background:var(--arc-paper);color:var(--arc-ink)} .footer ::-moz-selection{background:var(--arc-paper);color:var(--arc-ink)}
-  body.spotlight-active ::selection{background:var(--arc-paper);color:var(--arc-ink)} body.spotlight-active ::-moz-selection{background:var(--arc-paper);color:var(--arc-ink)}
-  body.service-active ::selection{background:var(--arc-paper);color:var(--arc-ink)} body.service-active ::-moz-selection{background:var(--arc-paper);color:var(--arc-ink)}
   a{color:inherit;text-decoration:none} a:focus-visible,button:focus-visible{outline:2px solid currentColor;outline-offset:2px}
   .wrap{max-width:var(--arc-max);margin:0 auto;padding:0 var(--arc-pad)}
   .skip{position:absolute;left:-9999px;top:0;background:var(--arc-ink);color:var(--arc-paper);padding:8px 12px;z-index:999}
@@ -57,7 +56,6 @@
   .brand img{height:42px;width:auto;display:block;flex:none;transition:filter 1.1s var(--arc-ease-dark)}
   .brand .brand-logo-mobile{display:none}
   .brand .brand-logo-desktop{display:block}
-  body.spotlight-active .brand img,body.service-active .brand img{filter:brightness(0) invert(1)}
   @media(max-width:860px){.brand .brand-logo-desktop{display:none} .brand .brand-logo-mobile{display:block}}
 .nav{display:flex;gap:32px;align-items:center;font-size:15px;letter-spacing:0.07em;text-transform:uppercase;font-weight:500;font-family:var(--arc-display);transition:filter 1.1s var(--arc-ease-dark)}
 .nav a{color:var(--color-text-muted);position:relative;transition:color .2s var(--arc-ease)} .nav a:not(.btn)::after{content:"";position:absolute;left:0;bottom:-4px;width:100%;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .32s var(--arc-ease)} .nav a:hover{color:var(--color-text)} .nav a:not(.btn):hover::after{transform:scaleX(1)} .nav a.active{color:var(--color-text)} .nav a.active:not(.btn)::after{transform:scaleX(1)}
@@ -65,12 +63,9 @@
 .nav .btn.btn--plum{color:var(--arc-white)} .nav .btn.btn--plum:hover{color:var(--arc-white)}
 @media(max-width:860px){.header-inner{flex-wrap:nowrap;align-items:center} .nav{gap:18px;flex-wrap:wrap} .nav a:not(.btn){font-size:14px} .nav .btn{height:36px;padding:0 14px;font-size:12px}}
 .nav-toggle{transition:filter 1.1s var(--arc-ease-dark),color .2s var(--arc-ease),opacity .3s var(--arc-ease)}
-/* FIX #4: filter the *text links* only — not the whole .nav subtree.
-   Previous version inverted the CTA button into invisible white-on-white. */
-body.spotlight-active .nav a:not(.btn),
-body.service-active .nav a:not(.btn),
+/* Modal-open (nav overlay) still inverts nav links so they read on the ink surface. */
 body.nav-overlay-open .nav a:not(.btn){filter:brightness(0) invert(1)}
-body.spotlight-active .nav-toggle,body.service-active .nav-toggle,body.nav-overlay-open .nav-toggle{filter:brightness(0) invert(1)}
+body.nav-overlay-open .nav-toggle{filter:brightness(0) invert(1)}
   .btn{height:40px;padding:0 20px;border-radius:999px;font-size:13px;font-weight:500;font-family:var(--arc-body);border:1px solid transparent;display:inline-flex;align-items:center;gap:6px;cursor:pointer;transition:color .2s var(--arc-ease),border-color .2s var(--arc-ease);position:relative;overflow:hidden;isolation:isolate}
   .btn svg{width:1em;height:1em;display:block;flex:none}
   .btn::before{content:"";position:absolute;inset:0;border-radius:0;transform:translateY(100%);transition:transform .28s var(--arc-ease);z-index:-1}
@@ -79,7 +74,6 @@ body.spotlight-active .nav-toggle,body.service-active .nav-toggle,body.nav-overl
   .btn--ghost{background:transparent;color:var(--arc-ink);border-color:var(--arc-mist)} .btn--ghost::before{background:var(--arc-ink)} .btn--ghost:hover,.btn--ghost:focus-visible{color:var(--arc-white);border-color:var(--arc-ink)}
   .btn--paper{background:var(--arc-paper);color:var(--arc-ink);border-color:var(--arc-paper)} .btn--paper::before{background:var(--arc-ink)} .btn--paper:hover,.btn--paper:focus-visible{color:var(--arc-paper);border-color:var(--arc-ink)}
   /* Hero - normal size, centered */
-  /* FIX #9: use real header height instead of stale 80px */
   .hero{min-height:calc(100vh - var(--header-h));min-height:calc(100dvh - var(--header-h));display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding-block:clamp(56px,8vw,96px)}
   .hero > div{width:100%;display:flex;flex-direction:column;align-items:center}
   .kicker{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:16px;font-weight:500;font-family:var(--arc-display)}
@@ -96,32 +90,19 @@ body.spotlight-active .nav-toggle,body.service-active .nav-toggle,body.nav-overl
   .proof span{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-text-muted);white-space:nowrap;font-family:var(--arc-display)}
   .proof-logos{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
   .proof-logos b{font-size:14px;letter-spacing:0.02em;font-weight:600}
-  /* Spotlight - transparent, large, not a card - full screen invert on scroll + vertical video */
+  /* Spotlight - transparent, large, not a card. No more scroll-driven theme invert. */
   .spotlight{background:transparent;color:var(--arc-ink);border-radius:0;padding:clamp(64px,8vw,120px) var(--arc-pad);display:grid;gap:clamp(32px,5vw,64px);align-items:center;text-align:left;margin-block:var(--arc-section);border-top:1px solid var(--arc-mist);border-bottom:1px solid var(--arc-mist);margin-left:calc(-1 * var(--arc-pad));margin-right:calc(-1 * var(--arc-pad));width:calc(100% + 2 * var(--arc-pad));transition:color 1.1s var(--arc-ease-dark),border-color 1.1s var(--arc-ease-dark),transform 1.1s var(--arc-ease-smooth),opacity 1.1s var(--arc-ease-smooth)}
   @media(min-width:900px){.spotlight{grid-template-columns:1.15fr 0.85fr}}
   @media(max-width:899px){.spotlight{grid-template-columns:1fr}}
-  /* FIX #6: removed `flex:1` which stretched the heading vertically inside a column flexbox */
   .spotlight h2{font-family:var(--arc-display);font-size:clamp(28px,4.8vw,60px);line-height:0.88;letter-spacing:-0.04em;margin:0;text-transform:uppercase;width:100%;max-width:none;align-self:flex-start;transition:color 1.1s var(--arc-ease-dark)}
   .spotlight-copy{display:flex;flex-direction:column;align-items:flex-start;gap:28px;justify-content:center;flex:1;min-width:0;width:100%}
   .spotlight-media{width:100%;height:100%;display:flex;align-items:stretch;justify-content:stretch;min-height:380px;max-height:480px}
   .spotlight-media img{width:100%;height:100%;aspect-ratio:4/5;object-fit:cover;background:var(--arc-mist);border:1px solid var(--arc-mist);display:block}
-  /* FIX #11: keep height:100% so object-fit:cover actually crops — previously height:auto broke the frame */
   @media(max-width:900px){.spotlight-media{min-height:0; aspect-ratio:4/5; max-height:62vh}}
-  body.spotlight-active .spotlight-media img{border-color:rgba(229,229,234,0.12);background:rgba(255,255,255,0.06)}
   .spotlight p{color:var(--color-text-muted);font-size:clamp(15px,1.4vw,18px);line-height:26px;max-width:42ch;margin:0;transition:color 1.1s var(--arc-ease-dark)}
   /* Full-screen invert when spotlight is in view - super smooth */
   html{scroll-behavior:smooth}
   body{transition:background 1.1s var(--arc-ease-dark),color 1.1s var(--arc-ease-dark)}
-  body.spotlight-active{background:var(--arc-ink);color:var(--arc-paper)}
-  body.spotlight-active .spotlight{color:var(--arc-paper);border-color:rgba(229,229,234,0.12)}
-  body.spotlight-active .spotlight p{color:rgba(249,249,250,0.7)}
-  body.spotlight-active .header{background:rgba(34,32,38,0.92);border-bottom-color:rgba(229,229,234,0.12);transition:background 1.1s var(--arc-ease-dark),border-color 1.1s var(--arc-ease-dark)}
-body.spotlight-active .footer{border-color:rgba(229,229,234,0.12);color:rgba(249,249,250,0.6);transition:border-color 1.1s var(--arc-ease-dark),color 1.1s var(--arc-ease-dark)}
-  body.spotlight-active .display,body.spotlight-active .section-head h2,body.spotlight-active .service h3,body.spotlight-active .card h3,body.spotlight-active .spotlight h2{color:var(--arc-paper);transition:color 1.1s var(--arc-ease-dark)}
-  body.spotlight-active .lede,body.spotlight-active .section-head p,body.spotlight-active .service p,body.spotlight-active .card p{color:rgba(249,249,250,0.7);transition:color 1.1s var(--arc-ease-dark)}
-  body.spotlight-active .btn--ghost{background:transparent;border-color:rgba(249,249,250,0.3);color:var(--arc-paper)}
-  body.spotlight-active .btn--ghost::before{background:var(--arc-paper)}
-  body.spotlight-active .btn--ghost:hover,body.spotlight-active .btn--ghost:focus-visible{color:var(--arc-ink);border-color:var(--arc-paper)}
   .header,.nav a,.display,.section-head h2,.section-head p,.service h3,.service p,.card h3,.card p,.lede,.footer{transition:background 1.1s var(--arc-ease-dark),color 1.1s var(--arc-ease-dark),border-color 1.1s var(--arc-ease-dark)}
   /* Work, like BASIC home-case-studies 77 but 6 */
   .section{padding-block:var(--arc-section)}
@@ -146,17 +127,14 @@ body.spotlight-active .footer{border-color:rgba(229,229,234,0.12);color:rgba(249
   .carousel .card .eyebrow{font-size:12px;letter-spacing:0.1em}
   .carousel::after{content:"";flex:0 0 1px}
   @media(max-width:700px){.carousel .card{flex:0 0 82%}}
-  /* Drag floating tooltip — positioned via the CSS `translate` property
-     (set from JS), leaving `transform` free for the center/scale animation.
-     FIX #12: drop `backdrop-filter:invert(1)` (double-inverted the blend).
-     `mix-blend-mode:difference` alone is correct on paper/ink themes. */
+  /* Drag floating tooltip — positioned via the CSS `translate` property */
   .drag-cursor{position:fixed;left:0;top:0;translate:-200px -200px;width:88px;height:88px;border-radius:50%;background:var(--arc-ink);color:var(--arc-paper);display:flex;align-items:center;justify-content:center;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;pointer-events:none;opacity:0;transform:translate(-50%,-50%) scale(0.5) rotate(-8deg);transition:opacity .3s cubic-bezier(0.4,0,0.2,1),transform .4s cubic-bezier(0.34,1.56,0.64,1);z-index:9999;will-change:translate,transform;box-shadow:0 12px 32px rgba(0,0,0,0.18);font-family:var(--arc-display)}
   .drag-cursor.is-visible{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0deg)}
   .drag-cursor.is-dragging{transform:translate(-50%,-50%) scale(0.92) rotate(0deg);background:var(--arc-ink)}
   .drag-cursor span{display:block;transform:translateY(1px)}
-  /* Ink bubble is invisible on ink backgrounds (overlay + inverted sections) */
-  body.spotlight-active .drag-cursor,body.service-active .drag-cursor,body.nav-overlay-open .drag-cursor{background:var(--arc-paper);color:var(--arc-ink)}
-  body.spotlight-active .drag-cursor.is-dragging,body.service-active .drag-cursor.is-dragging,body.nav-overlay-open .drag-cursor.is-dragging{background:var(--arc-paper)}
+  /* Ink bubble is invisible on ink surfaces — flip on the dark overlay only */
+  body.nav-overlay-open .drag-cursor{background:var(--arc-paper);color:var(--arc-ink)}
+  body.nav-overlay-open .drag-cursor.is-dragging{background:var(--arc-paper)}
   @media(prefers-reduced-motion:reduce){.drag-cursor{transition:opacity .15s linear}}
   @media(hover:none){.drag-cursor{display:none !important} .carousel .card,.overlay-carousel .card,body.has-drag-cursor .carousel .card,body.has-drag-cursor .overlay-carousel .card{cursor:grab}}
   /* Film grain — inline SVG turbulence tile (~1KB) instead of a 137KB PNG */
@@ -176,8 +154,8 @@ body.spotlight-active .footer{border-color:rgba(229,229,234,0.12);color:rgba(249
   #work .grid{display:flex;flex-direction:column;gap:0}
   #work .card{flex-direction:column;align-items:stretch;gap:0;padding:32px 0;border-bottom:1px solid var(--arc-mist);background:transparent}
   #work .card:last-child{border-bottom:none}
-  #work .card > div:first-child{flex:none;max-width:100%;width:100%;aspect-ratio:1.8 !important}
-  #work .card-body{padding:16px 0 0;flex:1;display:flex;flex-direction:column;justify-content:flex-start;gap:12px;align-self:stretch}
+#work .card > div:first-child{flex:none;max-width:100%;width:100%;aspect-ratio:1.8 !important}
+#work .card-body{padding:16px 0 0;flex:1;display:flex;flex-direction:column;justify-content:flex-start;gap:12px;align-self:stretch}
   #work .card h3{font-size:clamp(24px,3.4vw,36px);line-height:1.05;transition:text-decoration .2s var(--arc-ease);text-underline-offset:6px}
   #work .card p{font-size:16px;line-height:24px;max-width:60ch}
   #work .card .eyebrow{font-size:12px;letter-spacing:0.1em}
@@ -189,7 +167,7 @@ body.spotlight-active .footer{border-color:rgba(229,229,234,0.12);color:rgba(249
   /* Journal - same as Select work */
   #journal .grid{display:flex;flex-direction:column;gap:0}
   #journal .card{flex-direction:row;align-items:stretch;gap:32px;padding:32px 0;border-bottom:1px solid var(--arc-mist);background:transparent}
-  #journal .card:last-child{border-bottom:none}
+#journal .card:last-child{border-bottom:none}
   #journal .card > div:first-child{flex:0 0 340px;max-width:340px}
   #journal .card-body{padding:0;flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:16px;align-self:stretch}
   #journal .card h3{font-size:clamp(24px,3.4vw,36px);line-height:1.05;transition:text-decoration .2s var(--arc-ease);text-underline-offset:6px}
@@ -200,17 +178,14 @@ body.spotlight-active .footer{border-color:rgba(229,229,234,0.12);color:rgba(249
   #journal .card .eyebrow{font-size:12px;letter-spacing:0.1em}
   #journal .card:hover h3{text-decoration:underline;text-decoration-thickness:1.5px}
   @media(max-width:800px){#journal .card{flex-direction:column;align-items:flex-start;gap:16px;padding:24px 0} #journal .card > div:first-child{flex:none;max-width:100%;width:100%}}
-  /* Services - sticky theme like spotlight, image right, title sticky left */
+  /* Services - sticky left title, image right. No more scroll-driven theme invert. */
   #services{padding-block:0}
   #services .section-head{position:relative;top:auto;background:var(--arc-paper);z-index:1;padding:24px 0;margin:0;border-bottom:1px solid var(--arc-mist);margin-left:calc(-1 * var(--arc-pad));margin-right:calc(-1 * var(--arc-pad));padding-left:var(--arc-pad);padding-right:var(--arc-pad);width:calc(100% + 2 * var(--arc-pad));transition:background 1.1s var(--arc-ease-dark),border-color 1.1s var(--arc-ease-dark)}
-  body.service-active #services .section-head{background:var(--arc-ink);border-color:rgba(229,229,234,0.12)}
-  body.service-active #services .section-head h2{color:var(--arc-paper)}
   .services-sticky{display:flex;flex-direction:column}
   .service-sticky{position:relative;min-height:88vh;display:flex;align-items:flex-start;padding:32px 0 clamp(56px,8vw,96px) 0;border-top:1px solid var(--arc-mist);margin-left:calc(-1 * var(--arc-pad));margin-right:calc(-1 * var(--arc-pad));padding-left:var(--arc-pad);padding-right:var(--arc-pad);width:calc(100% + 2 * var(--arc-pad));background:transparent;transition:background 1s cubic-bezier(0.4,0,0.2,1),border-color 1s cubic-bezier(0.4,0,0.2,1)}
   .service-sticky:first-of-type{border-top:none}
   .service-sticky-inner{display:grid;gap:48px;align-items:start;width:100%;max-width:var(--arc-max);margin:0 auto}
   @media(min-width:900px){.service-sticky-inner{grid-template-columns:1.15fr 0.85fr}}
-  /* FIX #5: stick below the header, not behind it */
   .service-sticky-title{position:sticky;top:var(--header-h);align-self:start;padding-top:32px}
   .service-sticky-title h3{font-family:var(--arc-display);font-size:clamp(28px,4.5vw,56px);line-height:0.9;letter-spacing:-0.04em;margin:0;text-transform:uppercase;max-width:10ch;transition:color 1s cubic-bezier(0.4,0,0.2,1)}
   .service-sticky-title .num{font-family:var(--arc-mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--color-text-muted);display:block;margin-bottom:12px;transition:color 1s cubic-bezier(0.4,0,0.2,1)}
@@ -220,20 +195,6 @@ body.spotlight-active .footer{border-color:rgba(229,229,234,0.12);color:rgba(249
   .service-sticky-visual ul{list-style:none;padding:0;margin:16px 0 0;display:flex;flex-direction:column;gap:10px}
   .service-sticky-visual li{font-size:14px;line-height:20px;color:var(--color-text-muted);padding-left:0;position:static;transition:color 1s cubic-bezier(0.4,0,0.2,1)}
   .service-sticky-visual li::before{content:none;display:none}
-  body.service-active{background:var(--arc-ink);color:var(--arc-paper)}
-  body.service-active .service-sticky{border-color:rgba(229,229,234,0.12)}
-  body.service-active .service-sticky-title h3{color:var(--arc-paper)}
-  body.service-active .service-sticky-title .num{color:rgba(249,249,250,0.6)}
-  body.service-active .service-sticky-visual p{color:rgba(249,249,250,0.75)}
-  body.service-active .service-sticky-visual li{color:rgba(249,249,250,0.75)}
-  body.service-active .service-sticky-visual li::before{content:none;display:none}
-body.service-active .service-sticky-visual .img{border-color:rgba(229,229,234,0.12);background:rgba(255,255,255,0.06)}
-body.service-active .header{background:rgba(34,32,38,0.92);border-bottom-color:rgba(229,229,234,0.12)}
-body.service-active .footer{border-color:rgba(229,229,234,0.12);color:rgba(249,249,250,0.6)}
-  body.spotlight-active .footer span[style*="mask"],body.service-active .footer span[style*="mask"]{background:var(--arc-paper) !important;transition:background 1.1s var(--arc-ease-dark)}
-  body.service-active .btn--ghost{background:transparent;border-color:rgba(249,249,250,0.3);color:var(--arc-paper)}
-  body.service-active .btn--ghost::before{background:var(--arc-paper)}
-  body.service-active .btn--ghost:hover,body.service-active .btn--ghost:focus-visible{color:var(--arc-ink);border-color:var(--arc-paper)}
   @media(max-width:900px){
     #services .section-head{position:static}
     .services-sticky{display:block}
@@ -261,14 +222,12 @@ body.service-active .footer{border-color:rgba(229,229,234,0.12);color:rgba(249,2
   .faq-item summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;cursor:pointer;padding:20px 0;font-family:var(--arc-display);font-size:clamp(16px,1.8vw,20px);line-height:1.2;font-weight:500;text-transform:uppercase;letter-spacing:-0.02em;color:var(--arc-ink)}
   .faq-item summary::-webkit-details-marker{display:none}
 .faq-item summary::after{content:"";width:clamp(24px,3.4vw,36px);height:clamp(24px,3.4vw,36px);flex:none;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201920%201920'%3E%3Cpath%20d='M866.332%20213v653.332H213v186.666h653.332v653.332h186.666v-653.332h653.332V866.332h-653.332V213z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201920%201920'%3E%3Cpath%20d='M866.332%20213v653.332H213v186.666h653.332v653.332h186.666v-653.332h653.332V866.332h-653.332V213z'/%3E%3C/svg%3E") center/contain no-repeat;transition:transform var(--duration-base) var(--ease-out)}
-/* FIX #1: this is the ONLY rule that should rotate the plus icon. */
 .faq-item[open] summary::after{transform:rotate(45deg)}
   .faq-item p{margin:0;max-width:60ch;color:var(--color-text-muted);font-size:clamp(16px,1.5vw,18px);line-height:1.65;opacity:0;transform:translateY(-8px);overflow:hidden;transition:opacity .35s var(--arc-ease),transform .4s var(--arc-ease-smooth),margin .4s var(--arc-ease)}
   .faq-item[open] p{opacity:1;transform:translateY(0);margin:0 0 20px}
   /* Headings uppercase trial */
   h2,h3{text-transform:uppercase}
   /* Nav toggle - dots on desktop, MENU on mobile */
-  /* FIX #8: adds opacity to the transition list so #navToggle fades instead of snapping */
   .nav-toggle{background:none;border:none;cursor:pointer;font-size:15px;letter-spacing:0.07em;text-transform:uppercase;font-weight:500;font-family:var(--arc-display);color:var(--color-text-muted);padding:4px 0;line-height:1;display:inline-flex;align-items:center;justify-content:center;flex:none;width:44px;transition:color .2s var(--arc-ease),opacity .3s var(--arc-ease),filter 1.1s var(--arc-ease-dark)}
   .nav-toggle:hover{color:var(--arc-ink)}
   .nav-toggle .dots-desktop{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;transition:transform .3s var(--arc-ease),opacity .3s var(--arc-ease)}
@@ -284,16 +243,14 @@ body.service-active .footer{border-color:rgba(229,229,234,0.12);color:rgba(249,2
 .nav.is-open{display:flex}
 .header-inner{position:relative;flex-wrap:nowrap;align-items:center}
 }
-  /* Nav overlay — black fade, services carousel (precise like Featured engagements) */
+  /* Nav overlay — black fade, services carousel */
   .header{position:sticky;top:0;z-index:900}
   .nav-overlay{position:fixed;inset:0;z-index:800;background:var(--arc-ink);color:var(--arc-paper);display:flex;flex-direction:column;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .7s var(--arc-ease-dark),visibility .7s var(--arc-ease-dark);overflow:auto;-webkit-overflow-scrolling:touch}
   .nav-overlay.is-open{opacity:1;visibility:visible;pointer-events:auto}
   .nav-overlay-inner{max-width:var(--arc-max);margin:0 auto;width:100%;padding:calc(var(--header-h) + 16px) var(--arc-pad) 48px;display:flex;flex-direction:column;gap:32px;min-height:100dvh}
   .nav-overlay-header{display:none}
-  /* FIX #7: single merged .nav-overlay-close block (was defined twice with conflicting props) */
   .nav-overlay-close{position:fixed;top:32px;right:var(--arc-pad);z-index:910;width:40px;height:40px;border-radius:50%;background:transparent;border:1px solid rgba(229,229,234,0.18);color:var(--arc-paper);display:inline-flex;align-items:center;justify-content:center;font-size:18px;line-height:1;cursor:pointer;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s var(--arc-ease),background .2s var(--arc-ease),border-color .2s var(--arc-ease),color .2s var(--arc-ease),transform .3s var(--arc-ease);transform:scale(0.92);overflow:hidden;isolation:isolate}
   .nav-overlay-close.is-visible{opacity:1;visibility:visible;pointer-events:auto;transform:scale(1)}
-  .nav-overlay-close:hover{border-color:var(--arc-paper);background:var(--arc-paper);color:var(--arc-ink)}
   .nav-overlay-close::before{content:"";position:absolute;inset:0;border-radius:50%;background:var(--arc-paper);transform:scale(0);transition:transform .28s var(--arc-ease);z-index:-1}
   .nav-overlay-close:hover::before,.nav-overlay-close:focus-visible::before{transform:scale(1)}
   .nav-overlay-close:hover,.nav-overlay-close:focus-visible{color:var(--arc-ink);border-color:var(--arc-paper)}
@@ -327,7 +284,7 @@ body.nav-overlay-open #navToggle{opacity:0;pointer-events:none}
   .overlay-carousel .card .arrow-circle:hover::before,.overlay-carousel .card .arrow-circle:focus-visible::before{transform:scale(1)}
   .overlay-carousel .card .arrow-circle:hover,.overlay-carousel .card .arrow-circle:focus-visible{color:var(--arc-ink);border-color:var(--arc-paper)}
   .overlay-carousel .card .arrow-circle svg{width:1em;height:1em;display:block;flex:none}
-  /* default btn animation inside dark overlay — same as site theme (slide ::before) */
+  /* default btn animation inside dark overlay */
   .nav-overlay .btn--ghost{background:transparent;border-color:rgba(249,249,250,0.22);color:var(--arc-paper)}
   .nav-overlay .btn--ghost::before{background:var(--arc-paper)}
   .nav-overlay .btn--ghost:hover,.nav-overlay .btn--ghost:focus-visible{color:var(--arc-ink);border-color:var(--arc-paper)}
@@ -342,10 +299,11 @@ body.nav-overlay-open #navToggle{opacity:0;pointer-events:none}
     .overlay-nav .overlay-label{display:none}
     .overlay-nav a.muted{display:none}
     .overlay-carousel .card{flex:0 0 82%}
-    .nav-overlay-inner{gap:28px;padding:calc(82px + var(--arc-pad)) var(--arc-pad) 48px}
+    /* BUG-11: use the same mobile header token so pad math is consistent */
+    .nav-overlay-inner{gap:28px;padding:calc(var(--header-h-mobile) + var(--arc-pad)) var(--arc-pad) 48px}
     .nav-overlay-close{top:20px;height:42px;width:42px}
   }
-    /* Footer — consistent with UI system: spare, 1px Mist, 4-column, same tokens as header/section */
+    /* Footer — consistent with UI system: spare, 1px Mist, 4-column */
     .footer{background:var(--arc-ink);color:var(--arc-paper);border-top:1px solid rgba(229,229,234,0.12);margin-top:var(--arc-section);margin-left:calc(-1 * var(--arc-pad));margin-right:calc(-1 * var(--arc-pad));width:calc(100% + 2 * var(--arc-pad));padding-block:clamp(56px,7vw,88px) 32px;font-size:13px;transition:border-color 1.1s var(--arc-ease-dark),background 1.1s var(--arc-ease-dark)}
     .footer-inner{margin:0 auto;padding:0 var(--arc-pad)}
     .footer-grid{display:grid;gap:48px 80px;align-items:start;grid-template-columns:1fr 1fr}
@@ -369,7 +327,6 @@ body.nav-overlay-open #navToggle{opacity:0;pointer-events:none}
     .footer-form-row .card-arrow{font-size:clamp(24px,3.4vw,36px);line-height:1;color:var(--arc-paper);flex:none;opacity:0;transform:translateX(-6px);transition:opacity .25s var(--arc-ease),transform .25s var(--arc-ease);pointer-events:none;display:inline-flex;align-items:center}
     .footer-form-row:hover .card-arrow,.footer-form-row:focus-within .card-arrow{opacity:1;transform:translateX(0)}
     .footer-form-row .card-arrow svg{width:1.15em;height:0.7em;display:block;flex:none;overflow:visible}
-  .card-arrow svg{width:1em;height:1em;display:block;flex:none}
     .footer-filler p strong{color:var(--arc-paper);font-weight:500}
     .footer-stack{display:flex;flex-direction:column;gap:0}
     .footer-stack-inner{display:grid;gap:36px 28px;align-items:start;grid-template-columns:1.15fr 0.85fr 1fr}
@@ -393,68 +350,8 @@ body.nav-overlay-open #navToggle{opacity:0;pointer-events:none}
     .footer-bottom a{color:rgba(249,249,250,0.6);text-decoration:none;border-bottom:1px solid transparent;transition:color .2s var(--arc-ease),border-color .2s var(--arc-ease)}
     .footer-bottom a:hover{color:var(--arc-paper);border-color:rgba(229,229,234,0.3)}
     @media(max-width:700px){.footer-bottom{grid-template-columns:1fr;gap:10px} .footer-bottom span:nth-child(2){justify-self:start;text-align:left} .footer-bottom span:last-child{justify-self:start}}
-/* ===== Design System: Semantic color application (override legacy #5a5870) ===== */
+/* ===== Design System: Semantic color application ===== */
 .lede,.kicker,.section-head p,.service p,.card p,.faq-item p,.intro-copy p,.service-sticky-visual li,.service-sticky-visual p,.proof span,.card .eyebrow,.eyebrow,.hero-meta,.nav a,.kicker{color:var(--color-text-muted)}
-body.spotlight-active .spotlight p,body.service-active .service-sticky-visual p,body.service-active .service-sticky-visual li{color:var(--color-text-muted-on-dark)}
-/* ===== FIX: invert semantic tokens when background is dark (spotlight / services) ===== */
-body.spotlight-active,body.service-active{
-  --color-bg:var(--arc-ink);
-  --color-text:#F9F9FA;
-  --color-text-muted:rgba(249,249,250,0.75);
-  --color-text-muted-on-dark:rgba(249,249,250,0.75);
-  --color-border:rgba(229,229,234,0.12);
-  --color-focus:#F9F9FA;
-}
-body.spotlight-active .display,
-body.spotlight-active .section-head h2,
-body.spotlight-active .intro-copy h2,
-body.spotlight-active .card h3,
-body.spotlight-active .faq-item summary,
-body.service-active .display,
-body.service-active .section-head h2,
-body.service-active .intro-copy h2,
-body.service-active .card h3,
-body.service-active .faq-item summary{
-  color:var(--color-text) !important;
-}
-body.spotlight-active .lede,
-body.spotlight-active .section-head p,
-body.spotlight-active .intro-copy p,
-body.spotlight-active .card p,
-body.spotlight-active .faq-item p,
-body.spotlight-active .service-sticky-visual p,
-body.service-active .lede,
-body.service-active .section-head p,
-body.service-active .intro-copy p,
-body.service-active .card p,
-body.service-active .faq-item p{
-  color:var(--color-text-muted) !important;
-}
-body.spotlight-active .kicker,
-body.spotlight-active .card .eyebrow,
-body.spotlight-active .eyebrow,
-body.spotlight-active .proof span,
-body.service-active .kicker,
-body.service-active .card .eyebrow,
-body.service-active .eyebrow,
-body.service-active .proof span{
-  color:rgba(249,249,250,0.6) !important;
-}
-body.spotlight-active .faq-item,
-body.spotlight-active .faq-list,
-body.spotlight-active #work .card,
-body.spotlight-active #journal .card,
-body.service-active .faq-item,
-body.service-active .faq-list,
-body.service-active #work .card,
-body.service-active #journal .card{
-  border-color:var(--color-border) !important;
-}
-body.spotlight-active .btn--ghost,
-body.service-active .btn--ghost{
-  color:var(--color-text) !important;
-  border-color:var(--color-border) !important;
-}
 /* ===== Typography tokens applied via fluid clamp ===== */
 .display{font-size:clamp(2.8rem,6vw,5rem)} .section-head h2{font-size:clamp(22px,2.2vw,28px)}
 /* ===== Motion tokens ===== */
@@ -467,13 +364,12 @@ a:focus-visible,button:focus-visible,.btn:focus-visible,.faq-item summary:focus-
 .btn .arrow-icon,.btn .card-arrow,.card .card-arrow,.btn svg,.card-arrow svg,.arrow-icon,.arrow-circle svg{transition:transform var(--duration-base) var(--ease-out),opacity var(--duration-base) var(--ease-out)}
 .btn:hover .arrow-icon,.btn:focus-visible .arrow-icon,.btn:hover .card-arrow,.btn:focus-visible .card-arrow,a.card:hover .arrow-icon,a.card:focus-visible .arrow-icon,a.card:hover .card-arrow,a.card:focus-visible .card-arrow,.hero-actions .btn:hover .arrow-icon,.hero-actions .btn:focus-visible .arrow-icon,.service-sticky-title a:hover .arrow-icon,.service-sticky-title a:focus-visible .arrow-icon,a:hover .arrow-icon,a:focus-visible .arrow-icon,.arrow-circle:hover svg,.arrow-circle:focus-visible svg{animation:arc-arrow-loop var(--duration-slow) var(--ease-out)}
 @media(prefers-reduced-motion:reduce){.btn:hover .arrow-icon,.btn:focus-visible .arrow-icon,.btn:hover .card-arrow,.btn:focus-visible .card-arrow,a.card:hover .arrow-icon,a.card:focus-visible .arrow-icon,a.card:hover .card-arrow,a.card:focus-visible .card-arrow,.arrow-circle:hover svg,.arrow-circle:focus-visible svg{animation:none}}
-/* ===== FAQ enhancements (FIX #1: only rotate rule kept) ===== */
+/* ===== FAQ enhancements ===== */
 .faq-item summary{transition:background var(--duration-base) var(--ease-out),color var(--duration-base) var(--ease-out),padding var(--duration-base) var(--ease-out)}
 .faq-item summary:hover{background:rgba(34,32,38,0.04);padding-left:8px;padding-right:8px;margin-left:-8px;margin-right:-8px;border-radius:4px}
 .faq-item summary:focus-visible{outline:2px solid var(--color-focus);outline-offset:2px;border-radius:4px}
-.faq-item summary::after{transition:transform var(--duration-base) var(--ease-out),background var(--duration-base) var(--ease-out)}
 .faq-item p{color:var(--color-text-muted);font-size:clamp(15px,1.4vw,18px)}
-.faq-item summary{ min-height:44px; } /* touch target */
+.faq-item summary{min-height:44px} /* touch target */
 @media(max-width:640px){.faq-item summary{padding:16px 0}}
 /* ===== Services list expandable ===== */
 .service-sticky-visual li{position:relative;display:flex;align-items:center;gap:8px;padding:10px 0;min-height:44px;border-bottom:1px solid transparent;cursor:pointer;transition:color var(--duration-base) var(--ease-out),background var(--duration-base) var(--ease-out)}
@@ -483,18 +379,16 @@ a:focus-visible,button:focus-visible,.btn:focus-visible,.faq-item summary:focus-
 .service-sticky-visual li[aria-expanded="true"] .svc-icon{transform:rotate(45deg);opacity:1}
 .svc-definition{overflow:hidden;max-height:0;opacity:0;transform:translateY(-4px);transition:max-height var(--duration-slow) var(--ease-out),opacity var(--duration-base) var(--ease-out),transform var(--duration-base) var(--ease-out),margin var(--duration-base) var(--ease-out);margin:0;color:var(--color-text-muted);font-size:13px;line-height:1.6;max-width:65ch}
 .service-sticky-visual li[aria-expanded="true"] + .svc-definition{max-height:120px;opacity:1;transform:translateY(0);margin:4px 0 8px 24px}
-body.service-active .service-sticky-visual li:hover{background:rgba(249,249,250,0.06)}
 /* ===== Nav states ===== */
 .nav a,.overlay-nav a,.footer-col a{transition:color var(--duration-base) var(--ease-out),opacity var(--duration-base) var(--ease-out)}
 .nav a:hover,.nav a:focus-visible{color:var(--color-text)}
 .nav a.active{color:var(--color-text);font-weight:600}
 .nav a.active::after{transform:scaleX(1)}
-/* ===== Drag cursor invert (FIX #12: single inversion via mix-blend-mode only) ===== */
+/* ===== Drag cursor invert (single inversion via mix-blend-mode only) ===== */
 @media(hover:hover){
   .drag-cursor{transition:opacity var(--duration-base) var(--ease-out),transform var(--duration-slow) var(--ease-out);mix-blend-mode:difference;background:#fff;color:#000}
   .drag-cursor.is-visible{opacity:1}
 }
-/* duplicate removed (was declared twice) */
 /* ===== Responsive breakpoints ===== */
 @media(max-width:639px){.grid.cols-3{grid-template-columns:1fr} .carousel .card{flex:0 0 82%} .section-head{flex-direction:column;align-items:flex-start}}
 @media(min-width:640px) and (max-width:1024px){.grid.cols-3{grid-template-columns:repeat(2,1fr)}}
@@ -515,6 +409,6 @@ body.service-active .service-sticky-visual li:hover{background:rgba(249,249,250,
 /* ===== Empty state for Journal ===== */
 .journal-empty{padding:48px 24px;text-align:center;border:1px dashed var(--color-border);border-radius:8px;color:var(--color-text-muted);max-width:65ch;margin:0 auto}
 .journal-empty h3{font-family:var(--arc-display);font-size:20px;text-transform:uppercase;letter-spacing:-0.02em;color:var(--color-text);margin:0 0 8px}
-/* ===== Intro fix (applies if inline style not updated) ===== */
+/* ===== Intro fix ===== */
 .intro-grid{grid-template-columns:minmax(0,2fr) minmax(0,1fr) !important}
 .intro-copy p{max-width:65ch !important}
