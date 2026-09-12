@@ -221,9 +221,9 @@
   .faq-item{border-bottom:1px solid var(--arc-mist);padding:0}
   .faq-item summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;cursor:pointer;padding:20px 0;font-family:var(--arc-display);font-size:clamp(16px,1.8vw,20px);line-height:1.2;font-weight:500;text-transform:uppercase;letter-spacing:-0.02em;color:var(--arc-ink)}
   .faq-item summary::-webkit-details-marker{display:none}
-  .faq-item summary::after{content:"+";font-size:clamp(18px,2.4vw,24px);line-height:1;flex:none;transition:transform .45s var(--arc-ease-smooth),opacity .3s var(--arc-ease);font-weight:400;transform:rotate(0deg);will-change:transform}
+  .faq-item summary::after{content:"+";font-size:clamp(24px,3.4vw,36px);line-height:1;flex:none;transition:transform .45s var(--arc-ease-smooth),opacity .3s var(--arc-ease);font-weight:400;transform:rotate(0deg);will-change:transform}
   .faq-item[open] summary::after{content:"−";transform:rotate(180deg)}
-  .faq-item p{margin:0;max-width:60ch;color:#5a5870;font-size:14px;line-height:22px;max-height:0;opacity:0;transform:translateY(-8px);overflow:hidden;transition:max-height .5s var(--arc-ease-smooth),opacity .35s var(--arc-ease),transform .4s var(--arc-ease-smooth),margin .4s var(--arc-ease)}
+  .faq-item p{margin:0;max-width:60ch;color:#5a5870;font-size:clamp(16px,1.5vw,18px);line-height:1.65;max-height:0;opacity:0;transform:translateY(-8px);overflow:hidden;transition:max-height .5s var(--arc-ease-smooth),opacity .35s var(--arc-ease),transform .4s var(--arc-ease-smooth),margin .4s var(--arc-ease)}
   .faq-item[open] p{max-height:300px;opacity:1;transform:translateY(0);margin:0 0 20px}
   /* Headings uppercase trial */
   h2,h3{text-transform:uppercase}
