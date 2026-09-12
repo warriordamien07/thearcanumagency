@@ -31,10 +31,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <div className="wrap">
           <main id="main">{children}</main>
-          <Footer />
-          <DragCursor />
-          <div className="grain" aria-hidden="true" />
         </div>
+        <Footer />
+        <DragCursor />
+        <div className="grain" aria-hidden="true" />
       </body>
     </html>
   );
