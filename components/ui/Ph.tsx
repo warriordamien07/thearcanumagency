@@ -32,6 +32,7 @@ export function Ph({
   return (
     <Image
       className="ph"
+      draggable={false}
       src={src}
       alt={alt}
       width={width}

@@ -32,15 +32,21 @@ export function Featured() {
       const walk = (x - startX) * 1.5;
       el.scrollLeft = scrollLeft - walk;
     };
+    // Kill native image ghost-drag so dragging always scrolls the carousel.
+    const onDragStart = (e: DragEvent) => {
+      e.preventDefault();
+    };
     el.addEventListener("mousedown", onDown);
     el.addEventListener("mouseleave", onLeave);
     el.addEventListener("mouseup", onUp);
     el.addEventListener("mousemove", onMove);
+    el.addEventListener("dragstart", onDragStart);
     return () => {
       el.removeEventListener("mousedown", onDown);
       el.removeEventListener("mouseleave", onLeave);
       el.removeEventListener("mouseup", onUp);
       el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("dragstart", onDragStart);
     };
   }, []);
 

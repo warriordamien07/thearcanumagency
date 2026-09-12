@@ -52,15 +52,21 @@ export function Header() {
       const x = e.pageX - el.offsetLeft;
       el.scrollLeft = scrollLeft - (x - startX) * 1.5;
     };
+    // Kill native image ghost-drag so dragging always scrolls the carousel.
+    const onDragStart = (e: DragEvent) => {
+      e.preventDefault();
+    };
     el.addEventListener("mousedown", onDown);
     el.addEventListener("mouseleave", onUp);
     el.addEventListener("mouseup", onUp);
     el.addEventListener("mousemove", onMove);
+    el.addEventListener("dragstart", onDragStart);
     return () => {
       el.removeEventListener("mousedown", onDown);
       el.removeEventListener("mouseleave", onUp);
       el.removeEventListener("mouseup", onUp);
       el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("dragstart", onDragStart);
     };
   }, [overlayOpen]);
   // header hide on scroll

@@ -99,6 +99,7 @@
   .carousel{display:flex;gap:16px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:8px;padding-left:var(--arc-pad);padding-right:var(--arc-pad);margin-left:calc(-1 * var(--arc-pad));margin-right:calc(-1 * var(--arc-pad));width:calc(100% + 2 * var(--arc-pad));scroll-padding-inline:var(--arc-pad);cursor:grab}
   .carousel::-webkit-scrollbar{display:none}
   .carousel.dragging{cursor:grabbing;user-select:none;scroll-behavior:auto;scroll-snap-type:none}
+  .carousel img{-webkit-user-drag:none;user-select:none}
   .carousel .card{flex:0 0 360px;scroll-snap-align:start;cursor:grab}
   /* Hide the native cursor only when the JS-driven bubble is active —
      otherwise (touch, keyboard, JS failure) the pointer stays visible. */
