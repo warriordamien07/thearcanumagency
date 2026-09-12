@@ -37,11 +37,11 @@ export function Footer() {
               <nav className="footer-col" aria-label="Services">
                 <h3 className="footer-col-title">Services</h3>
                 <ul>
-                  <li><a href="#services">Web Design &amp; Development</a></li>
-                  <li><a href="#services">Branding &amp; Identity</a></li>
-                  <li><a href="#services">SEO &amp; AI Optimization</a></li>
+                  <li><a href="#services">Web Design & Development</a></li>
+                  <li><a href="#services">Branding & Identity</a></li>
+                  <li><a href="#services">SEO & AI Optimization</a></li>
                   <li><a href="#services">Ecommerce</a></li>
-                  <li><a href="#services">Website Support &amp; Hosting</a></li>
+                  <li><a href="#services">Website Support & Hosting</a></li>
                   <li><a href="#services">Website Review</a></li>
                 </ul>
               </nav>

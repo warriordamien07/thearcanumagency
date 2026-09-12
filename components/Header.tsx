@@ -1,45 +1,55 @@
 "use client";
-import { useEffect, useState } from "react";
-import { ArrowIcon, DotsIcon } from "./ui/icons";
+import { useEffect, useRef, useState } from "react";
+import { ArrowIcon } from "./ui/icons";
 import { Ph } from "./ui/Ph";
 
 export function Header() {
   const [overlayOpen, setOverlayOpen] = useState(false);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const previousActiveElement = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     document.body.classList.toggle("nav-overlay-open", overlayOpen);
     const closeBtn = document.getElementById("overlayClose");
     if (closeBtn) closeBtn.classList.toggle("is-visible", overlayOpen);
+
     // Lenis handling
     // @ts-ignore
     if (overlayOpen && (window as any).__lenis) (window as any).__lenis.stop();
     // @ts-ignore
     if (!overlayOpen && (window as any).__lenis) (window as any).__lenis.start();
+
+    // Focus management
+    if (overlayOpen) {
+      previousActiveElement.current = document.activeElement as HTMLElement;
+      // Focus the close button when overlay opens
+      setTimeout(() => closeBtn?.focus(), 0);
+    } else if (previousActiveElement.current) {
+      previousActiveElement.current.focus();
+    }
   }, [overlayOpen]);
 
-  // Accessibility: Escape closes, focus trap, return focus
+  // Escape closes overlay + returns focus
   useEffect(() => {
     if (!overlayOpen) return;
-    const overlay = document.getElementById("navOverlay");
-    const focusable = overlay?.querySelectorAll<HTMLElement>(
-      'a[href], button:not([disabled]), [tabindex="0"]'
-    );
-    const first = focusable?.[0];
-    const last = focusable?.[focusable.length - 1];
-    // focus first element when opened
-    setTimeout(() => (first as HTMLElement)?.focus(), 50);
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setOverlayOpen(false);
         document.getElementById("navToggle")?.focus();
       }
-      if (e.key === "Tab" && focusable && focusable.length > 1) {
-        if (e.shiftKey && document.activeElement === first) {
+      // Tab trapping within overlay
+      if (e.key === "Tab" && overlayRef.current) {
+        const focusableElements = overlayRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
+        );
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+        if (e.shiftKey && document.activeElement === firstElement) {
           e.preventDefault();
-          (last as HTMLElement)?.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
+          lastElement?.focus();
+        } else if (!e.shiftKey && document.activeElement === lastElement) {
           e.preventDefault();
-          (first as HTMLElement)?.focus();
+          firstElement?.focus();
         }
       }
     };
@@ -71,7 +81,6 @@ export function Header() {
       const x = e.pageX - el.offsetLeft;
       el.scrollLeft = scrollLeft - (x - startX) * 1.5;
     };
-    // Kill native image ghost-drag so dragging always scrolls the carousel.
     const onDragStart = (e: DragEvent) => {
       e.preventDefault();
     };
@@ -88,6 +97,7 @@ export function Header() {
       el.removeEventListener("dragstart", onDragStart);
     };
   }, [overlayOpen]);
+
   // header hide on scroll
   useEffect(() => {
     const hdr = document.querySelector(".header") as HTMLElement;
@@ -122,12 +132,12 @@ export function Header() {
             <img className="brand-logo-mobile" src="/assets/logo_mobile.svg" alt="The Arcanum Agency" width={200} height={225} />
           </a>
           <nav className="nav" aria-label="Primary" id="primaryNav">
-            <a href="#work" className="active" aria-current="page">Work</a>
+            <a href="#work" className="active">Work</a>
             <a href="#about">About</a>
             <a href="#journal">News</a>
             <a href="#services">Services</a>
             <a href="#journal">Portfolio</a>
-            <a href="mailto:hello@thearcanum.agency?subject=Request%20a%20consultation%20-%20The%20Arcanum%20Agency" aria-label="Request a consultation via email">Reach out</a>
+            <a href="mailto:hello@thearcanum.agency?subject=Enquiry%2C%20The%20Arcanum%20Agency">Reach out</a>
           </nav>
           <button
             id="navToggle"
@@ -137,7 +147,7 @@ export function Header() {
             aria-controls="navOverlay"
             onClick={() => setOverlayOpen((v) => !v)}
           >
-            <span className="dots-desktop" aria-hidden="true"><DotsIcon /></span>
+            <span className="dots-desktop" aria-hidden="true">···</span>
             <span className="dots-mobile">MENU</span>
           </button>
         </div>
@@ -153,6 +163,7 @@ export function Header() {
       </button>
 
       <div
+        ref={overlayRef}
         id="navOverlay"
         className={`nav-overlay ${overlayOpen ? "is-open" : ""}`}
         aria-hidden={!overlayOpen}
@@ -171,8 +182,8 @@ export function Header() {
             <a href="#journal" onClick={() => setOverlayOpen(false)}>News</a>
             <a href="#services" onClick={() => setOverlayOpen(false)}>Services</a>
             <a href="#journal" onClick={() => setOverlayOpen(false)}>Portfolio</a>
-            <a href="mailto:hello@thearcanum.agency?subject=Request%20a%20consultation%20-%20The%20Arcanum%20Agency" className="muted" onClick={() => setOverlayOpen(false)}>
-              hello@thearcanum.agency — Request a consultation <ArrowIcon />
+            <a href="mailto:hello@thearcanum.agency?subject=Enquiry%2C%20The%20Arcanum%20Agency" className="muted" onClick={() => setOverlayOpen(false)}>
+              hello@thearcanum.agency — Start a conversation <ArrowIcon />
             </a>
           </nav>
           <div className="overlay-services">
@@ -189,7 +200,7 @@ export function Header() {
                 { t: "SEO & AI Optimization", d: "Search-ready foundations tuned for traditional and generative engines.", img: "/assets/img/seo.jpg", alt: "Search analytics" },
                 { t: "Ecommerce & Website Care", d: "Storefronts built to convert, plus hosting and care after launch.", img: "/assets/img/ecommerce.jpg", alt: "Checkout and payment" },
               ].map((s) => (
-                <div key={s.t} className="card" tabIndex={0} role="button" aria-label={`Explore ${s.t}`}>
+                <div key={s.t} className="card">
                   <div style={{ aspectRatio: 1.36 as any, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(229,229,234,0.14)", overflow: "hidden" }}>
                     <Ph src={s.img} alt={s.alt} sizes="(max-width: 860px) 82vw, 360px" />
                   </div>
