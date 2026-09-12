@@ -1,5 +1,6 @@
 import { SectionHead } from "../ui/Section";
 import { Ph } from "../ui/Ph";
+import { ArrowIcon } from "../ui/icons";
 
 export function Work() {
   return (
@@ -19,7 +20,7 @@ export function Work() {
             <div className="card-body">
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16 }}>
                 <h3>Select work, on request</h3>
-                <span className="card-arrow">→</span>
+                <span className="card-arrow"><ArrowIcon /></span>
               </div>
               <p>{w.p}</p>
             </div>

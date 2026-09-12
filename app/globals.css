@@ -221,8 +221,8 @@
   .faq-item{border-bottom:1px solid var(--arc-mist);padding:0}
   .faq-item summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;cursor:pointer;padding:20px 0;font-family:var(--arc-display);font-size:clamp(16px,1.8vw,20px);line-height:1.2;font-weight:500;text-transform:uppercase;letter-spacing:-0.02em;color:var(--arc-ink)}
   .faq-item summary::-webkit-details-marker{display:none}
-  .faq-item summary::after{content:"+";font-size:clamp(24px,3.4vw,36px);line-height:1;flex:none;transition:transform .45s var(--arc-ease-smooth),opacity .3s var(--arc-ease);font-weight:400;transform:rotate(0deg);will-change:transform}
-  .faq-item[open] summary::after{content:"−";transform:rotate(180deg)}
+  .faq-item summary::after{content:"";width:clamp(24px,3.4vw,36px);height:clamp(24px,3.4vw,36px);flex:none;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201920%201920'%3E%3Cpath%20d='M866.332%20213v653.332H213v186.666h653.332v653.332h186.666v-653.332h653.332V866.332h-653.332V213z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201920%201920'%3E%3Cpath%20d='M866.332%20213v653.332H213v186.666h653.332v653.332h186.666v-653.332h653.332V866.332h-653.332V213z'/%3E%3C/svg%3E") center/contain no-repeat}
+  .faq-item[open] summary::after{-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20x='8'%20y='15'%20width='16'%20height='2'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20x='8'%20y='15'%20width='16'%20height='2'/%3E%3C/svg%3E")}
   .faq-item p{margin:0;max-width:60ch;color:#5a5870;font-size:clamp(16px,1.5vw,18px);line-height:1.65;max-height:0;opacity:0;transform:translateY(-8px);overflow:hidden;transition:max-height .5s var(--arc-ease-smooth),opacity .35s var(--arc-ease),transform .4s var(--arc-ease-smooth),margin .4s var(--arc-ease)}
   .faq-item[open] p{max-height:300px;opacity:1;transform:translateY(0);margin:0 0 20px}
   /* Headings uppercase trial */
@@ -286,6 +286,7 @@
   .overlay-carousel .card .arrow-circle::before{content:"";position:absolute;inset:0;border-radius:50%;background:var(--arc-paper);transform:scale(0);transition:transform .28s var(--arc-ease);z-index:-1}
   .overlay-carousel .card .arrow-circle:hover::before,.overlay-carousel .card .arrow-circle:focus-visible::before{transform:scale(1)}
   .overlay-carousel .card .arrow-circle:hover,.overlay-carousel .card .arrow-circle:focus-visible{color:var(--arc-ink);border-color:var(--arc-paper)}
+  .overlay-carousel .card .arrow-circle svg{width:1em;height:1em;display:block;flex:none}
   /* default btn animation inside dark overlay — same as site theme (slide ::before) */
   .nav-overlay .btn--ghost{background:transparent;border-color:rgba(249,249,250,0.22);color:var(--arc-paper)}
   .nav-overlay .btn--ghost::before{background:var(--arc-paper)}
@@ -330,7 +331,8 @@
     .footer-form-row button{background:transparent;border:none;padding:0;margin:0;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
     .footer-form-row .card-arrow{font-size:clamp(24px,3.4vw,36px);line-height:1;color:var(--arc-paper);flex:none;opacity:0;transform:translateX(-6px);transition:opacity .25s var(--arc-ease),transform .25s var(--arc-ease);pointer-events:none;display:inline-flex;align-items:center}
     .footer-form-row:hover .card-arrow,.footer-form-row:focus-within .card-arrow{opacity:1;transform:translateX(0)}
-    .card-arrow svg{width:1.15em;height:0.7em;display:block;flex:none;overflow:visible}
+    .footer-form-row .card-arrow svg{width:1.15em;height:0.7em;display:block;flex:none;overflow:visible}
+  .card-arrow svg{width:1em;height:1em;display:block;flex:none}
     .footer-filler p strong{color:var(--arc-paper);font-weight:500}
     .footer-stack{display:flex;flex-direction:column;gap:0}
     .footer-stack-inner{display:grid;gap:36px 28px;align-items:start;grid-template-columns:1.15fr 0.85fr 1fr}

@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { ArrowIcon } from "./ui/icons";
 
 export function Header() {
   const [overlayOpen, setOverlayOpen] = useState(false);
@@ -192,7 +193,7 @@ export function Header() {
                     <h3>{t}</h3>
                     <p>{d}</p>
                     <a href="#services" className="arrow-circle" aria-label={`Explore ${t}`}>
-                      <span aria-hidden="true">→</span>
+                      <span aria-hidden="true"><ArrowIcon /></span>
                     </a>
                   </div>
                 </div>

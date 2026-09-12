@@ -1,3 +1,5 @@
+import { ArrowIcon } from "./icons";
+
 type CardProps = {
   href?: string;
   eyebrow?: string;
@@ -15,7 +17,7 @@ export function Card({ href, eyebrow, title, desc, arrow = true, media }: CardPr
         {eyebrow && <span className="eyebrow">{eyebrow}</span>}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16 }}>
           <h3>{title}</h3>
-          {arrow && <span className="card-arrow">→</span>}
+          {arrow && <span className="card-arrow"><ArrowIcon /></span>}
         </div>
         {desc && <p>{desc}</p>}
       </div>

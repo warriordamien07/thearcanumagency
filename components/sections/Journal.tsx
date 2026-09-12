@@ -1,5 +1,6 @@
 import { SectionHead } from "../ui/Section";
 import { Ph } from "../ui/Ph";
+import { ArrowIcon } from "../ui/icons";
 
 export function Journal() {
   return (
@@ -17,7 +18,7 @@ export function Journal() {
             <div className="card-body">
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16 }}>
                 <h3>{j.title}</h3>
-                <span className="card-arrow">→</span>
+                <span className="card-arrow"><ArrowIcon /></span>
               </div>
               <p>{j.desc}</p>
             </div>
