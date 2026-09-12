@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { ArrowIcon } from "./ui/icons";
+import { ArrowIcon, DotsIcon } from "./ui/icons";
 import { Ph } from "./ui/Ph";
 
 export function Header() {
@@ -120,7 +120,7 @@ export function Header() {
             aria-controls="navOverlay"
             onClick={() => setOverlayOpen((v) => !v)}
           >
-            <span className="dots-desktop" aria-hidden="true">···</span>
+            <span className="dots-desktop" aria-hidden="true"><DotsIcon /></span>
             <span className="dots-mobile">MENU</span>
           </button>
         </div>
