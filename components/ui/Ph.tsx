@@ -8,13 +8,13 @@ const DIMS: Record<string, [number, number]> = {
   "/assets/img/work-2.jpg": [1200, 872],
   "/assets/img/work-3.jpg": [1200, 1500],
   "/assets/img/work-4.jpg": [1200, 855],
-  "/assets/img/service-web.jpg": [1200, 1500],
-  "/assets/img/service-brand.jpg": [1200, 1500],
-  "/assets/img/service-seo.jpg": [1200, 800],
-  "/assets/img/service-ecom.jpg": [1200, 801],
+  "/assets/img/web-dev.jpg": [1122, 1402],
+  "/assets/img/branding.jpg": [1122, 1402],
+  "/assets/img/seo.jpg": [1672, 941],
+  "/assets/img/ecommerce.jpg": [1122, 1402],
   "/assets/img/journal-1.jpg": [1200, 800],
   "/assets/img/journal-2.jpg": [1200, 800],
-  "/assets/img/spotlight.jpg": [880, 1100],
+  "/assets/img/connect-culture.jpg": [1122, 1402],
 };
 
 export function Ph({

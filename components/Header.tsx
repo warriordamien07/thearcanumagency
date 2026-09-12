@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { ArrowIcon } from "./ui/icons";
+import { Ph } from "./ui/Ph";
 
 export function Header() {
   const [overlayOpen, setOverlayOpen] = useState(false);
@@ -166,33 +167,20 @@ export function Header() {
             </div>
             <div className="carousel overlay-carousel" id="overlayCarousel" aria-label="Services carousel">
               {[
-                ["Web Design & Development", "Bespoke builds from architecture through launch, on WordPress or a custom stack."],
-                ["Branding & Identity", "Logo, visual identity, and guidelines that carry consistently everywhere."],
-                ["SEO & AI Optimization", "Search-ready foundations tuned for traditional and generative engines."],
-                ["Ecommerce & Website Care", "Storefronts built to convert, plus hosting and care after launch."],
-              ].map(([t, d]) => (
-                <div key={t} className="card">
-                  <div
-                    style={{
-                      aspectRatio: 1.36 as any,
-                      background: "rgba(255,255,255,0.04)",
-                      border: "1px solid rgba(229,229,234,0.14)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "rgba(249,249,250,0.5)",
-                      fontSize: 11,
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    {t}
+                { t: "Web Design & Development", d: "Bespoke builds from architecture through launch, on WordPress or a custom stack.", img: "/assets/img/web-dev.jpg", alt: "Website design and build" },
+                { t: "Branding & Identity", d: "Logo, visual identity, and guidelines that carry consistently everywhere.", img: "/assets/img/branding.jpg", alt: "Brand identity system" },
+                { t: "SEO & AI Optimization", d: "Search-ready foundations tuned for traditional and generative engines.", img: "/assets/img/seo.jpg", alt: "Search analytics" },
+                { t: "Ecommerce & Website Care", d: "Storefronts built to convert, plus hosting and care after launch.", img: "/assets/img/ecommerce.jpg", alt: "Checkout and payment" },
+              ].map((s) => (
+                <div key={s.t} className="card">
+                  <div style={{ aspectRatio: 1.36 as any, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(229,229,234,0.14)", overflow: "hidden" }}>
+                    <Ph src={s.img} alt={s.alt} sizes="(max-width: 860px) 82vw, 360px" />
                   </div>
                   <div className="card-body">
                     <span className="eyebrow">Service</span>
-                    <h3>{t}</h3>
-                    <p>{d}</p>
-                    <a href="#services" className="arrow-circle" aria-label={`Explore ${t}`}>
+                    <h3>{s.t}</h3>
+                    <p>{s.d}</p>
+                    <a href="#services" className="arrow-circle" aria-label={`Explore ${s.t}`}>
                       <span aria-hidden="true"><ArrowIcon /></span>
                     </a>
                   </div>

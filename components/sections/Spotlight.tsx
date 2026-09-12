@@ -40,7 +40,7 @@ export function Spotlight() {
         </div>
       </div>
       <div className="spotlight-media" aria-label="Studio work">
-        <Ph src="/assets/img/spotlight.jpg" alt="Minimal white architecture viewed from below" sizes="(max-width: 900px) 100vw, 480px" style={{ aspectRatio: "4/5" }} />
+        <Ph src="/assets/img/connect-culture.jpg" alt="Hand pressing a branded wax seal" sizes="(max-width: 900px) 100vw, 480px" style={{ aspectRatio: "4/5" }} />
       </div>
     </section>
   );

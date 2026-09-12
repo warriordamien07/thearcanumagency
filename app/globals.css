@@ -275,7 +275,7 @@
   .overlay-carousel::-webkit-scrollbar{display:none}
   .overlay-carousel.dragging{cursor:grabbing;user-select:none;scroll-behavior:auto;scroll-snap-type:none}
   .overlay-carousel .card{flex:0 0 360px;scroll-snap-align:start;cursor:grab;border:none;background:transparent}
-  .overlay-carousel .card > div:first-child{aspect-ratio:1.36;background:rgba(255,255,255,0.04);border:1px solid rgba(229,229,234,0.14);display:flex;align-items:center;justify-content:center;color:rgba(249,249,250,0.5);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-family:var(--arc-display)}
+  .overlay-carousel .card > div:first-child{aspect-ratio:1.36;background:rgba(255,255,255,0.04);border:1px solid rgba(229,229,234,0.14);overflow:hidden}
   .overlay-carousel .card .card-body{padding:14px;display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:12px}
   .overlay-carousel .card .eyebrow{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(249,249,250,0.5);font-family:var(--arc-display)}
   .overlay-carousel .card h3{font-family:var(--arc-display);font-size:clamp(20px,2.6vw,28px);line-height:1.05;font-weight:500;margin:0;text-transform:uppercase;color:var(--arc-paper);flex:1;min-width:0}
