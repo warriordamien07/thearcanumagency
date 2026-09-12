@@ -5,7 +5,7 @@ import { ArrowIcon } from "../ui/icons";
 export function Work() {
   return (
     <section id="work" className="section">
-      <SectionHead title="Select work" action={<a href="#work" className="btn btn--ghost">View all work →</a>} />
+      <SectionHead title="Select work" action={<a href="#work" className="btn btn--ghost">View all work <ArrowIcon /></a>} />
       <div className="grid">
         {[
           { p: "Scope defined before proposal. Private, by referral.", img: "/assets/img/work-1.jpg", alt: "Retail store interior" },

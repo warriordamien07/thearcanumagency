@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "../ui/Button";
+import { ArrowIcon } from "../ui/icons";
 
 export function Hero() {
   const copyEmail = async () => {
@@ -25,7 +26,7 @@ export function Hero() {
         </p>
         <div className="hero-actions">
           <Button href="mailto:hello@thearcanum.agency?subject=Enquiry%2C%20The%20Arcanum%20Agency" variant="plum">
-            Start a conversation →
+            Start a conversation <ArrowIcon />
           </Button>
           <Button variant="ghost" onClick={copyEmail} ariaLabel="Copy email">
             <span id="copyBtn">hello@thearcanum.agency</span>

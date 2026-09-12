@@ -5,7 +5,7 @@ import { ArrowIcon } from "../ui/icons";
 export function Journal() {
   return (
     <section id="journal" className="section">
-      <SectionHead title="Blog & News" action={<a href="#" className="btn btn--ghost">View all →</a>} />
+      <SectionHead title="Blog & News" action={<a href="#" className="btn btn--ghost">View all <ArrowIcon /></a>} />
       <div className="grid">
         {[
           { title: "Quiet journal, not blog farm", desc: "5–10 posts max, 60ch, spare. First essays on request.", img: "/assets/img/journal-1.jpg", alt: "Design process" },

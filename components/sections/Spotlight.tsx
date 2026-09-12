@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { Ph } from "../ui/Ph";
+import { ArrowIcon } from "../ui/icons";
 
 export function Spotlight() {
   const ref = useRef<HTMLElement>(null);
@@ -35,7 +36,7 @@ export function Spotlight() {
         <h2>The Arcanum Agency helps brands connect with culture</h2>
         <div style={{ marginTop: 8, display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "flex-start" }}>
           <a href="#about" className="btn btn--ghost">
-            See how →
+            See how <ArrowIcon />
           </a>
         </div>
       </div>

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { SectionHead } from "../ui/Section";
+import { ArrowIcon } from "../ui/icons";
 
 export function Featured() {
   const ref = useRef<HTMLDivElement>(null);
@@ -52,7 +53,7 @@ export function Featured() {
 
   return (
     <section className="section" aria-label="Featured engagements">
-      <SectionHead title="Featured engagements" action={<a href="#work" className="btn btn--ghost">View all →</a>} />
+      <SectionHead title="Featured engagements" action={<a href="#work" className="btn btn--ghost">View all <ArrowIcon /></a>} />
       <div className="carousel" id="featuredCarousel" ref={ref} aria-label="Featured engagements carousel">
         {[
           ["Private practice", "By referral or direct enquiry, limited at a time. We partner closely with founders and teams to shape focused, durable outcomes."],

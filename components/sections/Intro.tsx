@@ -1,3 +1,5 @@
+import { ArrowIcon } from "../ui/icons";
+
 export function Intro() {
   return (
     <section
@@ -36,7 +38,7 @@ export function Intro() {
           <h2>The Arcanum Agency is a Web Design &amp; Development Studio.</h2>
           <p>We build brand identities, ecommerce experiences, and the search and AI discovery systems behind them, for businesses that want to be unmistakable.</p>
           <a href="#about" className="btn btn--ghost" style={{ marginTop: 20 }}>
-            Know more →
+            Know more <ArrowIcon />
           </a>
         </div>
         <div className="intro-mark" aria-hidden="true">

@@ -162,7 +162,7 @@ export function Header() {
             <div className="section-head">
               <h2>Services</h2>
               <a href="#services" className="btn btn--ghost" onClick={() => setOverlayOpen(false)}>
-                View all →
+                View all <ArrowIcon />
               </a>
             </div>
             <div className="carousel overlay-carousel" id="overlayCarousel" aria-label="Services carousel">

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { Ph } from "../ui/Ph";
+import { ArrowIcon } from "../ui/icons";
 
 export function Services() {
   useEffect(() => {
@@ -62,7 +63,7 @@ export function Services() {
               <div className="service-sticky-title">
                 <h3>{s.title}</h3>
                 <a href={`mailto:hello@thearcanum.agency?subject=Enquiry%20-%20${encodeURIComponent(s.title)}`} className="btn btn--ghost" style={{ marginTop: 16 }}>
-                  Let&apos;s go →
+                  Let&apos;s go <ArrowIcon />
                 </a>
               </div>
               <div className="service-sticky-visual">
