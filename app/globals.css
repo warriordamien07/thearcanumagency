@@ -377,8 +377,67 @@
     .footer-bottom a:hover{color:var(--arc-paper);border-color:rgba(229,229,234,0.3)}
     @media(max-width:700px){.footer-bottom{grid-template-columns:1fr;gap:10px} .footer-bottom span:nth-child(2){justify-self:start;text-align:left} .footer-bottom span:last-child{justify-self:start}}
 /* ===== Design System: Semantic color application (override legacy #5a5870) ===== */
-.lede,.kicker,.section-head p,.service p,.card p,.faq-item p,.intro-copy p,.service-sticky-visual li,.service-sticky-visual p,.proof span{color:var(--color-text-muted)}
+.lede,.kicker,.section-head p,.service p,.card p,.faq-item p,.intro-copy p,.service-sticky-visual li,.service-sticky-visual p,.proof span,.card .eyebrow,.eyebrow,.hero-meta,.nav a,.kicker{color:var(--color-text-muted)}
 body.spotlight-active .spotlight p,body.service-active .service-sticky-visual p,body.service-active .service-sticky-visual li{color:var(--color-text-muted-on-dark)}
+/* ===== FIX: invert semantic tokens when background is dark (spotlight / services) ===== */
+body.spotlight-active,body.service-active{
+  --color-bg:var(--arc-ink);
+  --color-text:#F9F9FA;
+  --color-text-muted:rgba(249,249,250,0.75);
+  --color-text-muted-on-dark:rgba(249,249,250,0.75);
+  --color-border:rgba(229,229,234,0.12);
+  --color-focus:#F9F9FA;
+}
+body.spotlight-active .display,
+body.spotlight-active .section-head h2,
+body.spotlight-active .intro-copy h2,
+body.spotlight-active .card h3,
+body.spotlight-active .faq-item summary,
+body.service-active .display,
+body.service-active .section-head h2,
+body.service-active .intro-copy h2,
+body.service-active .card h3,
+body.service-active .faq-item summary{
+  color:var(--color-text) !important;
+}
+body.spotlight-active .lede,
+body.spotlight-active .section-head p,
+body.spotlight-active .intro-copy p,
+body.spotlight-active .card p,
+body.spotlight-active .faq-item p,
+body.spotlight-active .service-sticky-visual p,
+body.service-active .lede,
+body.service-active .section-head p,
+body.service-active .intro-copy p,
+body.service-active .card p,
+body.service-active .faq-item p{
+  color:var(--color-text-muted) !important;
+}
+body.spotlight-active .kicker,
+body.spotlight-active .card .eyebrow,
+body.spotlight-active .eyebrow,
+body.spotlight-active .proof span,
+body.service-active .kicker,
+body.service-active .card .eyebrow,
+body.service-active .eyebrow,
+body.service-active .proof span{
+  color:rgba(249,249,250,0.6) !important;
+}
+body.spotlight-active .faq-item,
+body.spotlight-active .faq-list,
+body.spotlight-active #work .card,
+body.spotlight-active #journal .card,
+body.service-active .faq-item,
+body.service-active .faq-list,
+body.service-active #work .card,
+body.service-active #journal .card{
+  border-color:var(--color-border) !important;
+}
+body.spotlight-active .btn--ghost,
+body.service-active .btn--ghost{
+  color:var(--color-text) !important;
+  border-color:var(--color-border) !important;
+}
 /* ===== Typography tokens applied via fluid clamp ===== */
 .display{font-size:clamp(2.8rem,6vw,5rem)} .section-head h2{font-size:clamp(22px,2.2vw,28px)} 
 /* ===== Motion tokens ===== */
