@@ -1,7 +1,61 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Ph } from "../ui/Ph";
 import { ArrowIcon } from "../ui/icons";
+
+const DEFINITIONS: Record<string, string> = {
+  "Fully Bespoke Builds": "Built from first principles — no templates. Every layout, interaction, and system is crafted to your brand's logic and commercial intent.",
+  "WordPress & Custom CMS": "WordPress for editorial velocity, or a fully custom stack when you need granular control. We choose the system that matches content, scale, and governance.",
+  "Motion & Interaction Design": "Subtle motion that signals hierarchy and continuity — never decoration. Timed at 150–400ms with easing that respects reduced-motion.",
+  "Considered User Experience": "Research-led journeys that reduce friction and respect attention. Clear hierarchy, generous whitespace, measurable outcomes.",
+  "Logo & Mark Design": "A mark distilled to its essence — memorable at 16px and durable across decades. Tested in monochrome before color.",
+  "Visual Identity Systems": "Typography, palette, and components that carry consistently from site to deck to storefront. Documented for autonomous use.",
+  "Brand Guidelines": "A practical rulebook, not a trophy PDF. Usage, exclusions, and examples so the brand stays unmistakable in others' hands.",
+  "Brand Voice & Messaging": "Positioning and voice that turn cultural value into company value. Concise, precise, and ownable.",
+  "Technical & On-Page SEO": "Foundations baked into architecture — crawl, index, and core vitals. No bolt-on audits after launch.",
+  "Content Structure & Search Health": "Information architecture and schema that help humans and search engines understand what to cite next.",
+  "GEO (Generative Engine Optimization)": "Structuring content so AI search and answer engines can read, understand, and cite you. Alongside traditional SEO, not instead of it.",
+  "AI Search & Answer-Engine Visibility": "Visibility where decisions are now made — AI overviews, chat answers, and generative feeds. Measured by citations, not just rank.",
+  "Ecommerce Storefronts & Checkout": "Storefronts built to convert: fast loads, clear hierarchy, and checkout with minimal friction and maximal trust.",
+  "Managed Hosting & Maintenance": "Hosting, updates, and 24-hour support turnaround. We stay close beyond launch to compound value.",
+  "Website Review & Consultation": "A candid audit of what helps and what hinders — structure, performance, and perception — with prioritised next steps.",
+};
+
+function ServiceBullet({ label, id }: { label: string; id: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <li
+        id={id}
+        role="button"
+        tabIndex={0}
+        aria-expanded={open}
+        aria-controls={`${id}-def`}
+        onClick={() => setOpen((v) => !v)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setOpen((v) => !v);
+          }
+        }}
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+      >
+        <span className="svc-icon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M8 3.5V12.5M3.5 8H12.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+          </svg>
+        </span>
+        <span>{label}</span>
+      </li>
+      <div id={`${id}-def`} className="svc-definition" role="region" aria-labelledby={id}>
+        {DEFINITIONS[label] ?? ""}
+      </div>
+    </>
+  );
+}
 
 export function Services() {
   useEffect(() => {
@@ -72,8 +126,8 @@ export function Services() {
                 </div>
                 <p>{s.desc}</p>
                 <ul>
-                  {s.bullets.map((b) => (
-                    <li key={b}>{b}</li>
+                  {s.bullets.map((b, idx) => (
+                    <ServiceBullet key={b} label={b} id={`svc-${s.title.replace(/\s+/g, "-").toLowerCase()}-${idx}`} />
                   ))}
                 </ul>
               </div>

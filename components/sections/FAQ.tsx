@@ -17,7 +17,7 @@ const ITEMS: Array<[string, string]> = [
 
 const EASE_SMOOTH = "cubic-bezier(0.16,1,0.3,1)";
 
-function FaqItem({ q, a }: { q: string; a: string }) {
+function FaqItem({ q, a, id }: { q: string; a: string; id: string }) {
   const detailsRef = useRef<HTMLDetailsElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const busyRef = useRef(false);
@@ -30,8 +30,8 @@ function FaqItem({ q, a }: { q: string; a: string }) {
     e.preventDefault();
     const p = body.firstElementChild as HTMLElement | null;
     busyRef.current = true;
+    const summary = details.querySelector("summary") as HTMLElement | null;
     if (details.open) {
-      // Animated close: shrink while still open, then close natively.
       body.style.height = `${body.offsetHeight}px`;
       void body.offsetHeight;
       const shrink = body.animate([{ height: body.style.height }, { height: "0px" }], {
@@ -45,13 +45,14 @@ function FaqItem({ q, a }: { q: string; a: string }) {
       });
       shrink.onfinish = () => {
         details.open = false;
+        if (summary) summary.setAttribute("aria-expanded", "false");
         body.style.height = "";
         fade?.cancel();
         busyRef.current = false;
       };
     } else {
-      // Animated open: open natively, then grow from zero.
       details.open = true;
+      if (summary) summary.setAttribute("aria-expanded", "true");
       body.style.height = "0px";
       void body.offsetHeight;
       const target = body.scrollHeight;
@@ -74,8 +75,19 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 
   return (
     <details ref={detailsRef} className="faq-item">
-      <summary onClick={onSummaryClick}>{q}</summary>
-      <div ref={bodyRef} className="faq-a">
+      <summary
+        onClick={onSummaryClick}
+        id={`${id}-trigger`}
+        aria-expanded="false"
+        aria-controls={`${id}-panel`}
+        role="button"
+        tabIndex={0}
+        style={{ minHeight: 44 }}
+      >
+        <span>{q}</span>
+        <span aria-hidden="true" className="faq-icon" />
+      </summary>
+      <div ref={bodyRef} className="faq-a" id={`${id}-panel`} role="region" aria-labelledby={`${id}-trigger`}>
         <p>{a}</p>
       </div>
     </details>
@@ -84,13 +96,13 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 
 export function FAQ() {
   return (
-    <section id="about" className="section" style={{ borderTop: "1px solid var(--arc-mist)" }}>
+    <section id="about" className="section" style={{ borderTop: "1px solid var(--color-border)" }} aria-labelledby="faq-heading">
       <div className="section-head">
-        <h2>FAQ</h2>
+        <h2 id="faq-heading">FAQ</h2>
       </div>
-      <div className="faq-list">
-        {ITEMS.map(([q, a]) => (
-          <FaqItem key={q} q={q} a={a} />
+      <div className="faq-list" role="list">
+        {ITEMS.map(([q, a], i) => (
+          <FaqItem key={q} q={q} a={a} id={`faq-${i}`} />
         ))}
       </div>
     </section>

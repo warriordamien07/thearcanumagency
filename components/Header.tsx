@@ -17,13 +17,30 @@ export function Header() {
     if (!overlayOpen && (window as any).__lenis) (window as any).__lenis.start();
   }, [overlayOpen]);
 
-  // Escape closes overlay + returns focus (parity with index.html)
+  // Accessibility: Escape closes, focus trap, return focus
   useEffect(() => {
     if (!overlayOpen) return;
+    const overlay = document.getElementById("navOverlay");
+    const focusable = overlay?.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), [tabindex="0"]'
+    );
+    const first = focusable?.[0];
+    const last = focusable?.[focusable.length - 1];
+    // focus first element when opened
+    setTimeout(() => (first as HTMLElement)?.focus(), 50);
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setOverlayOpen(false);
         document.getElementById("navToggle")?.focus();
+      }
+      if (e.key === "Tab" && focusable && focusable.length > 1) {
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          (last as HTMLElement)?.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          (first as HTMLElement)?.focus();
+        }
       }
     };
     document.addEventListener("keydown", onKey);
@@ -105,12 +122,12 @@ export function Header() {
             <img className="brand-logo-mobile" src="/assets/logo_mobile.svg" alt="The Arcanum Agency" width={200} height={225} />
           </a>
           <nav className="nav" aria-label="Primary" id="primaryNav">
-            <a href="#work" className="active">Work</a>
+            <a href="#work" className="active" aria-current="page">Work</a>
             <a href="#about">About</a>
             <a href="#journal">News</a>
             <a href="#services">Services</a>
             <a href="#journal">Portfolio</a>
-            <a href="mailto:hello@thearcanum.agency?subject=Enquiry%2C%20The%20Arcanum%20Agency">Reach out</a>
+            <a href="mailto:hello@thearcanum.agency?subject=Request%20a%20consultation%20-%20The%20Arcanum%20Agency" aria-label="Request a consultation via email">Reach out</a>
           </nav>
           <button
             id="navToggle"
@@ -154,8 +171,8 @@ export function Header() {
             <a href="#journal" onClick={() => setOverlayOpen(false)}>News</a>
             <a href="#services" onClick={() => setOverlayOpen(false)}>Services</a>
             <a href="#journal" onClick={() => setOverlayOpen(false)}>Portfolio</a>
-            <a href="mailto:hello@thearcanum.agency?subject=Enquiry%2C%20The%20Arcanum%20Agency" className="muted" onClick={() => setOverlayOpen(false)}>
-              hello@thearcanum.agency — Start a conversation →
+            <a href="mailto:hello@thearcanum.agency?subject=Request%20a%20consultation%20-%20The%20Arcanum%20Agency" className="muted" onClick={() => setOverlayOpen(false)}>
+              hello@thearcanum.agency — Request a consultation <ArrowIcon />
             </a>
           </nav>
           <div className="overlay-services">
