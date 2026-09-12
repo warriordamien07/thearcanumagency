@@ -331,7 +331,7 @@
   }
     /* Footer — consistent with UI system: spare, 1px Mist, 4-column, same tokens as header/section */
     .footer{background:var(--arc-ink);color:var(--arc-paper);border-top:1px solid rgba(229,229,234,0.12);margin-top:var(--arc-section);margin-left:calc(-1 * var(--arc-pad));margin-right:calc(-1 * var(--arc-pad));width:calc(100% + 2 * var(--arc-pad));padding-block:clamp(56px,7vw,88px) 32px;font-size:13px;transition:border-color 1.1s var(--arc-ease-dark),background 1.1s var(--arc-ease-dark)}
-    .footer-inner{max-width:var(--arc-max);margin:0 auto;padding:0 var(--arc-pad)}
+    .footer-inner{margin:0 auto;padding:0 var(--arc-pad)}
     .footer-grid{display:grid;gap:48px 80px;align-items:start;grid-template-columns:1fr 1fr}
     @media(max-width:860px){.footer-grid{gap:40px 32px}}
     @media(max-width:639px){.footer-grid{grid-template-columns:1fr 1fr;gap:36px 24px}}
@@ -342,7 +342,7 @@
     .footer-brand-tag{font-size:clamp(15px,1.3vw,17px);line-height:1.6;color:rgba(249,249,250,0.55);margin:0;max-width:26ch}
     .footer-filler{display:flex;flex-direction:column;gap:14px;justify-content:flex-start}
     .footer-filler-title{font-family:var(--arc-display);font-size:clamp(20px,1.8vw,24px);line-height:1.05;letter-spacing:-0.02em;text-transform:uppercase;font-weight:500;color:var(--arc-paper);margin:0}
-    .footer-filler p{font-family:var(--arc-display);font-size:clamp(20px,1.8vw,24px);line-height:1.05;letter-spacing:-0.02em;text-transform:uppercase;font-weight:500;color:var(--arc-paper);margin:0;max-width:22ch}
+    .footer-filler p{font-family:var(--arc-display);font-size:clamp(20px,1.8vw,24px);line-height:1.05;letter-spacing:-0.02em;text-transform:uppercase;font-weight:500;color:var(--arc-paper);margin:0}
     .footer-form{display:flex;flex-direction:column;gap:12px}
     .footer-form-label{font-family:var(--arc-display);font-size:clamp(20px,1.8vw,24px);line-height:1.05;letter-spacing:-0.02em;text-transform:uppercase;font-weight:500;color:var(--arc-paper);margin:0}
     .footer-form-row{display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(229,229,234,0.18);padding-bottom:10px;transition:border-color .2s var(--arc-ease)}
