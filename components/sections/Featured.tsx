@@ -33,7 +33,6 @@ export function Featured() {
       const walk = (x - startX) * 1.5;
       el.scrollLeft = scrollLeft - walk;
     };
-    // Kill native image ghost-drag so dragging always scrolls the carousel.
     const onDragStart = (e: DragEvent) => {
       e.preventDefault();
     };
@@ -62,16 +61,16 @@ export function Featured() {
           ["Senior attention", "Direct access to principals from inquiry to delivery, with clear scope and deliberate pace from start to finish."],
           ["Continuity", "Relationships over transactions. We stay close beyond launch to refine, compound value, and keep the brand unmistakable."],
         ].map(([t, d]) => (
-          <div key={t} className="card" tabIndex={0} role="button" aria-label={`${t} — Read more`}>
+          <div key={t} className="card">
             <div
               style={{
                 aspectRatio: 1.36 as any,
                 background: "transparent",
-                border: "1px solid var(--arc-mist)",
+                border: "1px solid var(--color-border)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "#5a5870",
+                color: "var(--color-text-subtle)",
                 fontSize: 11,
                 letterSpacing: "0.08em",
                 textTransform: "uppercase",
