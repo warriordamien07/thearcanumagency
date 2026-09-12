@@ -1,14 +1,15 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
+import { Hanken_Grotesk } from "next/font/google";
 import { GeistMono } from "geist/font/mono";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { DragCursor } from "../components/ui/DragCursor";
 
-// Self-hosted (preloaded, no render-blocking Google Fonts chain).
+// Hanken Grotesk (body) + Geist Mono, self-hosted at build time via
+// next/font (preloaded, no render-blocking Google Fonts chain).
 // Variable names match --arc-body / --arc-mono in globals.css.
-const geistSans = GeistSans;
+const hanken = Hanken_Grotesk({ subsets: ["latin"], variable: "--font-hanken", display: "swap" });
 const geistMono = GeistMono;
 
 export const metadata: Metadata = {
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en" className={`${hanken.variable} ${geistMono.variable}`}>
       <head>
         <link rel="icon" href="/assets/arcanum-mark.svg" />
       </head>
